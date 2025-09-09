@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelompoks', function (Blueprint $table) {
+        Schema::create('pengaturan_web', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kelompok');
-            $table->string('url_grub')->nullable();
+            $table->string("logo_hmif")->nullable();
+            $table->string("logo_gamatif")->nullable();
+            $table->string("nama_kegiatan")->nullable();
             $table->timestamps();
         });
-    
     }
 
     /**
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelompoks');
+        Schema::dropIfExists('pengaturan_web');
     }
 };

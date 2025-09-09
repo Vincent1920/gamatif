@@ -35,6 +35,7 @@ class IzinKehadiranResource extends Resource
     protected static ?string $model = IzinKehadiran::class;
     
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
+    protected static ?string $navigationGroup = 'Absensi Mahasiswa';
 
     protected static ?string $pluralModelLabel = 'Izin Kehadiran Mahasiswa';
 
@@ -127,6 +128,7 @@ public static function form(Form $form): Form
                                         ->image()
                                         ->preserveFilenames()
                                         ->disk('public')
+                                        ->directory('IzinKehadiran')
                                         ->openable()
                                         ->previewable()
                                         ->downloadable()

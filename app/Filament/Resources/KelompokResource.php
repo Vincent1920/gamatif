@@ -22,7 +22,7 @@ class KelompokResource extends Resource
      protected static ?string $navigationLabel = 'Kelompok';
     protected static ?string $pluralLabel = 'Kelompok';
       protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Data Master';
 
 
     public static function form(Form $form): Form

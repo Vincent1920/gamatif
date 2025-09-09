@@ -27,6 +27,7 @@ use App\Filament\Resources\BarangSitaanResource\RelationManagers;
 class BarangSitaanResource extends Resource
 {
     protected static ?string $model = BarangSitaan::class;
+    protected static ?string $navigationGroup = 'Barang Bawaan';
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 

@@ -28,6 +28,7 @@ class DataMahasiswaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $navigationGroup = 'Data Master';
     protected static ?string $pluralModelLabel = 'Data Mahasiswa';
 
     public static function form(Form $form): Form

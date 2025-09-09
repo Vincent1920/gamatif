@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelompoks', function (Blueprint $table) {
+        Schema::create('sosial_media', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kelompok');
-            $table->string('url_grub')->nullable();
+            $table->string("nama")->nullable();
+            $table->string("thumbnail")->nullable();
+            $table->string("url")->nullable();
             $table->timestamps();
         });
-    
     }
 
     /**
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelompoks');
+        Schema::dropIfExists('sosial_media');
     }
 };
