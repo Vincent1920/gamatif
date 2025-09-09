@@ -11,16 +11,16 @@ class DatabaseSeeder extends Seeder
     {
         // Daftar nama kelompok
         $kelompokNames = [
-            'Gipsy_Danger',
-            'Striker_Eureka',
-            'Crimson_Typhoon',
-            'Cherno_Alpha',
-            'Bracer_Phoenix',
-            'Saber_Athena',
-            'Titan_Redeemer',
-            'Guardian_Bravo',
-            'Obsidian_Fury',
-            'Horizon_Brave'
+            'Gipsy Danger',
+            'Striker Eureka',
+            'Crimson Typhoon',
+            'Cherno Alpha',
+            'Bracer Phoenix',
+            'Saber Athena',
+            'Titan Redeemer',
+            'Guardian Bravo',
+            'Obsidian Fury',
+            'Horizon Brave'
         ];
 
         // Buat data kelompok
@@ -51,16 +51,16 @@ class DatabaseSeeder extends Seeder
 
         // Data mahasiswa
         $mahasiswaData = [
-            ['nim' => '10001', 'nama' => 'Gipsy Danger', 'nama_kelompok' => 'Gipsy_Danger'],
-            ['nim' => '10002', 'nama' => 'Striker Eureka', 'nama_kelompok' => 'Striker_Eureka'],
-            ['nim' => '10003', 'nama' => 'Crimson Typhoon', 'nama_kelompok' => 'Crimson_Typhoon'],
-            ['nim' => '10004', 'nama' => 'Cherno Alpha', 'nama_kelompok' => 'Cherno_Alpha'],
-            ['nim' => '10005', 'nama' => 'Bracer Phoenix', 'nama_kelompok' => 'Bracer_Phoenix'],
-            ['nim' => '10006', 'nama' => 'Saber Athena', 'nama_kelompok' => 'Saber_Athena'],
-            ['nim' => '10007', 'nama' => 'Titan Redeemer', 'nama_kelompok' => 'Titan_Redeemer'],
-            ['nim' => '10008', 'nama' => 'Guardian Bravo', 'nama_kelompok' => 'Guardian_Bravo'],
-            ['nim' => '10009', 'nama' => 'Obsidian Fury', 'nama_kelompok' => 'Obsidian_Fury'],
-            ['nim' => '10010', 'nama' => 'Horizon Brave', 'nama_kelompok' => 'Horizon_Brave'],
+            ['nim' => '10001', 'nama' => 'Gipsy Danger', 'nama_kelompok' => 'Gipsy Danger'],
+            ['nim' => '10002', 'nama' => 'Striker Eureka', 'nama_kelompok' => 'Striker Eureka'],
+            ['nim' => '10003', 'nama' => 'Crimson Typhoon', 'nama_kelompok' => 'Crimson Typhoon'],
+            ['nim' => '10004', 'nama' => 'Cherno Alpha', 'nama_kelompok' => 'Cherno Alpha'],
+            ['nim' => '10005', 'nama' => 'Bracer Phoenix', 'nama_kelompok' => 'Bracer Phoenix'],
+            ['nim' => '10006', 'nama' => 'Saber Athena', 'nama_kelompok' => 'Saber Athena'],
+            ['nim' => '10007', 'nama' => 'Titan Redeemer', 'nama_kelompok' => 'Titan Redeemer'],
+            ['nim' => '10008', 'nama' => 'Guardian Bravo', 'nama_kelompok' => 'GuardianBravo'],
+            ['nim' => '10009', 'nama' => 'Obsidian Fury', 'nama_kelompok' => 'Obsidian Fury'],
+            ['nim' => '10010', 'nama' => 'Horizon Brave', 'nama_kelompok' => 'Horizon Brave'],
         ];
 
         foreach ($mahasiswaData as $data) {
