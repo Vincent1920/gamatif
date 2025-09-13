@@ -39,15 +39,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Buat user untuk masing-masing kelompok
-        foreach ($kelompokNames as $index => $name) {
-            User::factory()->create([
-                'name' => 'Kelompok ' . ($index + 1) . ' - ' . str_replace('_', ' ', $name),
-                'role' => 'pk',
-                'email' => $name . '@gmail.com',
-                'password' => Hash::make($name),
-                'kelompok_id' => $kelompoks[$name]->id,
-            ]);
-        }
+     foreach ($kelompokNames as $index => $name) {
+        // ubah spasi jadi underscore, tapi biarkan huruf besar tetap
+        $emailName = str_replace(' ', '_', $name);
+
+        User::factory()->create([
+            'name' => 'Kelompok ' . ($index + 1) . ' - ' . str_replace('_', ' ', $name),
+            'role' => 'pk',
+            'email' => $emailName . '@gmail.com',
+            'password' => Hash::make($emailName), // password juga bisa pakai versi underscore
+            'kelompok_id' => $kelompoks[$name]->id,
+        ]);
+    }
+
 
         // Data mahasiswa
         $mahasiswaData = [
@@ -58,7 +62,7 @@ class DatabaseSeeder extends Seeder
             ['nim' => '10005', 'nama' => 'Bracer Phoenix', 'nama_kelompok' => 'Bracer Phoenix'],
             ['nim' => '10006', 'nama' => 'Saber Athena', 'nama_kelompok' => 'Saber Athena'],
             ['nim' => '10007', 'nama' => 'Titan Redeemer', 'nama_kelompok' => 'Titan Redeemer'],
-            ['nim' => '10008', 'nama' => 'Guardian Bravo', 'nama_kelompok' => 'GuardianBravo'],
+            ['nim' => '10008', 'nama' => 'Guardian Bravo', 'nama_kelompok' => 'Guardian Bravo'],
             ['nim' => '10009', 'nama' => 'Obsidian Fury', 'nama_kelompok' => 'Obsidian Fury'],
             ['nim' => '10010', 'nama' => 'Horizon Brave', 'nama_kelompok' => 'Horizon Brave'],
         ];

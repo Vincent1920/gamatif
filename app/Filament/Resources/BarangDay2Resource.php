@@ -56,8 +56,34 @@ class BarangDay2Resource extends Resource
         ->defaultSort('nim', 'asc') 
                ->columns([
             TextColumn::make('index')->label('No')->rowIndex(),
-            TextColumn::make('nim')->searchable()->sortable(),
-            TextColumn::make('nama')->searchable()->sortable(),
+            TextColumn::make('nim')
+            ->searchable()
+            ->sortable()
+            ->color(fn ($record) => 
+                    // Akses relasi 'izin' untuk mendapatkan data
+                    // Ganti 'izinKehadiran' dengan nama relasi yang benar di model Anda
+                    collect($record->izinKehadiran)
+                        ->contains(fn ($izin) => 
+                            in_array('day2', $izin->day ?? [])  
+                            
+                        )
+                        ? 'danger' 
+                        : null
+                ),
+                  TextColumn::make('nama')
+                ->searchable()
+                ->sortable()
+                ->color(fn ($record) => 
+                    // Akses relasi 'izin' untuk mendapatkan data
+                    // Ganti 'izinKehadiran' dengan nama relasi yang benar di model Anda
+                    collect($record->izinKehadiran) // Asumsi relasi 'izinKehadiran' adalah hasMany
+                        ->contains(fn ($izin) => 
+                            in_array('day2', $izin->day ?? []) 
+                        )
+                        ? 'danger' 
+                        : null
+                ),
+
             TextColumn::make('kelompok.nama_kelompok')->searchable()
             ->formatStateUsing(fn ($state) => str_replace('_', ' ', $state)),
 

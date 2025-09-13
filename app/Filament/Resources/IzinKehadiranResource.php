@@ -29,7 +29,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\IzinKehadiranResource\Pages;
 use App\Filament\Resources\IzinKehadiranResource\RelationManagers;
-
+use Symfony\Contracts\Service\Attribute\Required;
+use Filament\Forms\Components\Textarea;
 class IzinKehadiranResource extends Resource
 {
     protected static ?string $model = IzinKehadiran::class;
@@ -40,30 +41,50 @@ class IzinKehadiranResource extends Resource
     protected static ?string $pluralModelLabel = 'Izin Kehadiran Mahasiswa';
 
     public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-        $user = auth()->user();
-    
-        // Kalau admin, tampilkan semua
-        if ($user->email === 'admin@gmail.com') {
-            return $query;
-        }
-    
-        // Kalau PK, ambil nama kelompok dari email (sebelum '@')
-        $kelompokName = explode('@', $user->email)[0];
-    
-        // Cari id kelompok berdasarkan nama_kelompok
-        $kelompok = Kelompok::where('nama_kelompok', $kelompokName)->first();
-    
-        if ($kelompok) {
-            $query->where('kelompok_id', $kelompok->id);
-        } else {
-            // Kalau tidak ada kelompoknya, biar aman kasih kosong
-            $query->whereRaw('1=0');
-        }
-    
-        return $query;
+{
+    $query = parent::getEloquentQuery(); 
+
+    $user = auth()->user();
+    if ($user->email !== 'admin@gmail.com') {
+        $query->where('kelompok_id', $user->kelompok_id);
     }
+
+    return $query;
+}
+//    public static function getEloquentQuery(): Builder
+// {
+//     $query = parent::getEloquentQuery();
+//     $user = auth()->user();
+
+//     // Kalau admin → tampilkan semua
+//     if ($user->role === 'admin') {
+//         return $query;
+//     }
+
+//     // Kalau PK → filter berdasarkan kelompok
+//     if ($user->role === 'pk') {
+//         // Ambil nama kelompok dari email (sebelum @)
+//         $kelompokName = explode('@', $user->email)[0];
+
+//         // Cari id kelompok berdasarkan nama_kelompok
+//         $kelompok = Kelompok::where('nama_kelompok', $kelompokName)->first();
+
+//         if ($kelompok) {
+//             $query->where('kelompok_id', $kelompok->id);
+//         } else {
+//             // Kalau tidak ketemu, jangan tampilkan data
+//             $query->whereRaw('1=0');
+//         }
+//     }
+
+//     // Kalau bukan admin & bukan pk (misal mahasiswa) → hanya tampilkan miliknya sendiri
+//     if ($user->role === 'mahasiswa') {
+//         $query->where('id', $user->id);
+//     }
+
+//     return $query;
+// }
+
     
 public static function form(Form $form): Form
 {
@@ -109,6 +130,17 @@ public static function form(Form $form): Form
                         ->searchable()
                         ->required(), // wajib diisi
 
+                        
+                    Select::make('day')
+                        ->label('Day Gamatif')
+                        ->multiple() // bisa pilih lebih dari 1
+                        ->options([
+                            'day1' => 'Day 1',
+                            'day2' => 'Day 2',
+                            'day3' => 'Day 3',
+                        ])
+                        ->required(),
+
                     Select::make('keterangan')
                         ->label('Keterangan')
                         ->options([
@@ -117,6 +149,11 @@ public static function form(Form $form): Form
                             'Sakit' => 'Sakit',
                         ])
                         ->required(), // wajib diisi
+
+                     Textarea::make('catatan')
+                        ->label('Alasan Izin')
+                        ->required(),
+                    
 
                     Section::make('Surat Izin')
                         ->description('Wajib Melampirkan Surat!!!')
@@ -148,9 +185,17 @@ public static function table(Table $table): Table
         ->columns([
             TextColumn::make('No')
                 ->rowIndex(),
+          TextColumn::make('day')
+                ->label('Day')
+                ->formatStateUsing(fn ($state) => is_array(json_decode($state, true)) 
+                    ? implode(', ', json_decode($state, true)) 
+                    : $state)
+                ->sortable()
+                ->searchable(),
 
             TextColumn::make('tanggal'),
-
+            TextColumn::make('nim')
+                ->label('Nim'),
             TextColumn::make('dataMahasiswa.nama')
                 ->label('Nama Mahasiswa'),
 
@@ -159,16 +204,18 @@ public static function table(Table $table): Table
 
             TextColumn::make('keterangan'),
 
+            TextColumn::make('catatan'),
+
              // Klik gambar -> buka di tab baru
-    ImageColumn::make('foto')
-        ->label('Bukti Surat Izin')
-        ->disk('public')
-        ->width(120)
-        ->height(70)
-        ->square()
-        ->url(fn ($record) => Storage::disk('public')->url($record->foto))
-        ->openUrlInNewTab()
-        ->extraImgAttributes(['loading' => 'lazy']),
+            ImageColumn::make('foto')
+                ->label('Bukti Surat Izin')
+                ->disk('public')
+                ->width(120)
+                ->height(70)
+                ->square()
+                ->url(fn ($record) => Storage::disk('public')->url($record->foto))
+                ->openUrlInNewTab()
+                ->extraImgAttributes(['loading' => 'lazy']),
 
             TextColumn::make('download_link')
                 ->label('Download')

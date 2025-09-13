@@ -17,6 +17,8 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\BarangDay1Resource\Pages;
 use App\Filament\Resources\BarangDay1Resource\RelationManagers;
+use Filament\Tables\Columns\IconColumn;
+use App\Models\IzinKehadiran;
 
 class BarangDay1Resource extends Resource
 {
@@ -39,52 +41,64 @@ class BarangDay1Resource extends Resource
 
 public static function getEloquentQuery(): Builder
 {
-    $query = parent::getEloquentQuery();
-    $user = auth()->user();
+    // $query = parent::getEloquentQuery()->with('izins'); // eager-load relasi izins
+    $query = parent::getEloquentQuery(); // eager-load relasi izins
 
-    // Jika login bukan admin, filter berdasarkan kelompok
+    $user = auth()->user();
     if ($user->email !== 'admin@gmail.com') {
-        $kelompokId = $user->kelompok_id;
-        $query->where('kelompok_id', $kelompokId);
+        $query->where('kelompok_id', $user->kelompok_id);
     }
 
     return $query;
 }
 
-
-
 public static function table(Table $table): Table
 {
     return $table
         ->defaultPaginationPageOption('all')
-        ->defaultSort('nim', 'asc') 
+        ->defaultSort('nim', 'asc')
         ->columns([
             TextColumn::make('index')->label('No')->rowIndex(),
-            TextColumn::make('nim')->searchable()->sortable(),
-            TextColumn::make('nama')->searchable()->sortable(),
-            TextColumn::make('kelompok.nama_kelompok')->searchable()
-            ->formatStateUsing(fn ($state) => str_replace('_', ' ', $state)),
+            TextColumn::make('nim')
+            ->searchable()
+            ->sortable()
+            ->color(fn ($record) => 
+                    // Akses relasi 'izin' untuk mendapatkan data
+                    // Ganti 'izinKehadiran' dengan nama relasi yang benar di model Anda
+                    collect($record->izinKehadiran)
+                        ->contains(fn ($izin) => 
+                            in_array('day1', $izin->day ?? [])  
+                            
+                        )
+                        ? 'danger' 
+                        : null
+                ),
+            
+         
+            TextColumn::make('nama')
+                ->searchable()
+                ->sortable()
+                ->color(fn ($record) => 
+                    // Akses relasi 'izin' untuk mendapatkan data
+                    // Ganti 'izinKehadiran' dengan nama relasi yang benar di model Anda
+                    collect($record->izinKehadiran)
+                        ->contains(fn ($izin) => 
+                            in_array('day1', $izin->day ?? [])  
+                            
+                        )
+                        ? 'danger' 
+                        : null
+                ),
+
+            TextColumn::make('kelompok.nama_kelompok')
+                ->searchable()
+                ->formatStateUsing(fn ($state) => str_replace('_', ' ', $state)),
 
             CheckboxColumn::make('barang_1_day_1')->label('Better')->alignCenter(),
             CheckboxColumn::make('barang_2_day_1')->label('Makanan Beban')->alignCenter(),
             CheckboxColumn::make('barang_3_day_1')->label('Air Susu Putih')->alignCenter(),
             CheckboxColumn::make('barang_4_day_1')->label('Roti Croissant')->alignCenter(),
-            CheckboxColumn::make('barang_5_day_1')->label('paket5')->alignCenter(),
-        ])
-        ->filters(array_filter([
-            auth()->user()->role === 'admin'
-                ? SelectFilter::make('kelompok_id')
-                    ->label('Kelompok')
-                    ->relationship('kelompok', 'nama_kelompok')
-                : null,
-        ]))
-        ->actions([
-            // Tables\Actions\EditAction::make(),
-        ])
-        ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
+            CheckboxColumn::make('barang_5_day_1')->label('Paket 5')->alignCenter(),
         ]);
 }
 

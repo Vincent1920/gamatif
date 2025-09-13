@@ -10,10 +10,16 @@ class IzinKehadiran extends Model
     use HasFactory;
 
         protected $table = "izin_kehadiran";
-
+    
+        protected $casts = [
+            'day' => 'array',
+        ];
     protected $fillable = [
         'nim',
         'tanggal',
+        'catatan',
+        'day',
+        'data_mahasiswa_id',
         'kelompok_id',
         'keterangan',
         'foto'
@@ -26,6 +32,10 @@ class IzinKehadiran extends Model
     public function kelompok()
 {
     return $this->belongsTo(Kelompok::class, 'kelompok_id');
+}
+public function mahasiswa()
+{
+    return $this->belongsTo(DataMahasiswa::class, 'nim', 'nim');
 }
 
 }

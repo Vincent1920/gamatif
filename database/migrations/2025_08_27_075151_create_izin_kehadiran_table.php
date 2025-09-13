@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('izin_kehadiran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('nim');
+            $table->string('catatan');
+            $table->string('nim'); 
+            $table->foreign('nim')->references('nim')->on('data_mahasiswa')->onDelete('cascade');
+            $table->json('day');
             $table->date('tanggal');
-          $table->foreignId('kelompok_id')->constrained('kelompoks', 'id');
+            // $table->foreignId('data_mahasiswa_id')->constrained('data_mahasiswa', 'id');
+            $table->foreignId('kelompok_id')->constrained('kelompoks', 'id');
             $table->string('keterangan');
-           $table->string('foto')->nullable();
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

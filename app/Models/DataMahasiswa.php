@@ -24,6 +24,10 @@ class DataMahasiswa extends Model
     {
         return $this->hasMany(IzinKehadiran::class, 'nim', 'nim');
     }
+public function izins()
+{
+    return $this->hasMany(IzinKehadiran::class, 'nim', 'nim');
+}
 
 // barangSitaan
 
