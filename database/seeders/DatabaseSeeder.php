@@ -1,7 +1,9 @@
 <?php
+
 use App\Models\User;
 use App\Models\Kelompok;
 use App\Models\DataMahasiswa;
+use Database\Seeders\MahasiswaBaruSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -9,6 +11,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call([
+            MahasiswaBaruSeeder::class,
+        ]);
         // Daftar nama kelompok
         $kelompokNames = [
             'Gipsy Danger',
