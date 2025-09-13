@@ -58,7 +58,7 @@ class DatabaseSeeder extends Seeder
             ['nim' => '10005', 'nama' => 'Bracer Phoenix', 'nama_kelompok' => 'Bracer Phoenix'],
             ['nim' => '10006', 'nama' => 'Saber Athena', 'nama_kelompok' => 'Saber Athena'],
             ['nim' => '10007', 'nama' => 'Titan Redeemer', 'nama_kelompok' => 'Titan Redeemer'],
-            ['nim' => '10008', 'nama' => 'Guardian Bravo', 'nama_kelompok' => 'GuardianBravo'],
+            ['nim' => '10008', 'nama' => 'Guardian Bravo', 'nama_kelompok' => 'Guardian Bravo'],
             ['nim' => '10009', 'nama' => 'Obsidian Fury', 'nama_kelompok' => 'Obsidian Fury'],
             ['nim' => '10010', 'nama' => 'Horizon Brave', 'nama_kelompok' => 'Horizon Brave'],
         ];
