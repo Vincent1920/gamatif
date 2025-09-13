@@ -11,7 +11,8 @@ class kelompok extends Model
 {
     use HasFactory;
      protected $fillable = [
-        'nama_kelompok'
+        'nama_kelompok',
+        'url_grub'
     ];
 
      public function dataMahasiswa()
