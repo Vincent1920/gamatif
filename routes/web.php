@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\BarangSitaan;
-use App\Models\IzinKehadiran; 
+use App\Models\IzinKehadiran;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -24,8 +24,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 
 Route::get('/', function () {
-    return redirect(route('filament.admin.auth.login'));
-})->name('login');
+    // $web_setting = app(SettingController::class)->title();
+    return view('welcome');
+});
+// Fallback route untuk SPA - menangani semua route Vue Router
+Route::fallback(function () {
+    return view('welcome');
+});
 
 
 Route::get('/izin/{id}/download', [IzinKehadiranController::class, 'download'])
@@ -38,7 +43,7 @@ Route::get('/izin/{record}/view', function (IzinKehadiran $record) {
 
 Route::get('/BarangSitaan/{id}/download', [BarangSitaanController::class, 'download'])
     ->name('BarangSitaan.download');
-    
+
 // Route::get('/BarangSitaan/{record}/download', function (BarangSitaan $record) {
 //     abort_unless($record->foto, 404);
 //     return Storage::disk('public')->download($record->foto, basename($record->foto));
