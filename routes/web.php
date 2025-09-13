@@ -57,3 +57,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::get('/export-mahasiswa', function () {
     return Excel::download(new DataMahasiswaExport, 'data_mahasiswa.xlsx');
 });
+
+Route::get('/belum-aktif', function () {
+    return view('mahasiswa.belum-aktif');
+})->name('akun.belum-aktif');
