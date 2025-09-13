@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\MahasiswaBaruAuthController;
+use App\Http\Controllers\Api\MahasiswaBaruController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,20 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+
+Route::post('/register', [MahasiswaBaruAuthController::class, 'register']);
+Route::post('/login', [MahasiswaBaruAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [MahasiswaBaruAuthController::class, 'logout']);
+});
+
+
+// Route::middleware(['auth', 'check.status'])->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+//     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi');
+//     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+// });
+
