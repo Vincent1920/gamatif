@@ -37,6 +37,7 @@ class IzinKehadiranResource extends Resource
     
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
     protected static ?string $navigationGroup = 'Absensi Mahasiswa';
+protected static ?int $navigationSort = 3;
 
     protected static ?string $pluralModelLabel = 'Izin Kehadiran Mahasiswa';
 

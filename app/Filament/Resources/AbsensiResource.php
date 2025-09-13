@@ -21,7 +21,7 @@ class AbsensiResource extends Resource
     protected static ?string $model = Absensi::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationGroup = 'Absensi Mahasiswa';
-    
+    protected static ?int $navigationSort = 3;
     // Label dinamis per kelompok (opsional, bisa pakai Blade)
     protected static ?string $pluralModelLabel = 'Absensi';
 

@@ -19,13 +19,10 @@ use App\Filament\Resources\BarangDay3Resource\RelationManagers;
 class BarangDay3Resource extends Resource
 {
     protected static ?string $model = BarangDay3::class;
-
-   
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
     protected static ?string $pluralModelLabel = 'Barang Bawaan Day 3';
-
     protected static ?string $navigationGroup = 'Barang Bawaan';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

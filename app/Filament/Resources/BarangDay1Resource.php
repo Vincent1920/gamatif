@@ -30,7 +30,7 @@ class BarangDay1Resource extends Resource
     protected static ?string $pluralModelLabel = 'Barang Bawaan Day 1';
 
     protected static ?string $navigationGroup = 'Barang Bawaan';
-
+protected static ?int $navigationSort = 3;
     public static function form(Form $form): Form
     {
         return $form

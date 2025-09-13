@@ -30,6 +30,7 @@ class BarangSitaanResource extends Resource
     protected static ?string $navigationGroup = 'Barang Bawaan';
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
+protected static ?int $navigationSort = 3;
 
  protected static ?string $pluralModelLabel = 'Barang Sitaan';
 
