@@ -13,7 +13,7 @@ class DataMahasiswaPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
 
     /**
@@ -21,7 +21,7 @@ class DataMahasiswaPolicy
      */
     public function view(User $user, DataMahasiswa $dataMahasiswa): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -29,7 +29,7 @@ class DataMahasiswaPolicy
      */
     public function create(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -37,7 +37,7 @@ class DataMahasiswaPolicy
      */
     public function update(User $user, DataMahasiswa $dataMahasiswa): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -45,7 +45,7 @@ class DataMahasiswaPolicy
      */
     public function delete(User $user, DataMahasiswa $dataMahasiswa): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -53,7 +53,7 @@ class DataMahasiswaPolicy
      */
     public function restore(User $user, DataMahasiswa $dataMahasiswa): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -61,11 +61,11 @@ class DataMahasiswaPolicy
      */
     public function forceDelete(User $user, DataMahasiswa $dataMahasiswa): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
     public function deleteAny(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -73,7 +73,7 @@ class DataMahasiswaPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->email('admin@gmail.com');
+       return $user->role === 'admin';;
     }
 
     /**
@@ -81,6 +81,6 @@ class DataMahasiswaPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->email('admin@gmail.com');
+      return $user->role === 'admin';
     }
 }

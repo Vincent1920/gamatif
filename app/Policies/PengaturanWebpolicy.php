@@ -15,11 +15,11 @@ class PengaturanWebpolicy
     }
         public function viewAny(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
     
        public function view(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
 }

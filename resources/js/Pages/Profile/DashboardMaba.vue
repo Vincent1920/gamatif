@@ -27,7 +27,9 @@
                         v-if="user.kelompok"
                         class="text-gray-800 font-medium"
                     >
+
                         {{ user.kelompok.nama_kelompok }}
+
                     </span>
                     <span v-else class="text-gray-300"
                         >belum mengambil kelompok</span
