@@ -27,6 +27,7 @@ class PengaturanWebResource extends Resource
     protected static ?string $navigationGroup = 'Pengaturan';
     protected static ?string $pluralModelLabel = 'Pengaturan web';
     protected static ?int $navigationSort = 2;
+
 public static function form(Form $form): Form
 {
     return $form
@@ -34,15 +35,41 @@ public static function form(Form $form): Form
             Section::make('Data Kegiatan')
                 ->description('Lengkapi data kegiatan berikut.')
                 ->schema([
-                    
+
                     TextInput::make('nama_kegiatan')
                         ->label('Nama Kegiatan')
                         ->required()
                         ->maxLength(255)
                         ->columnSpanFull(),
 
+                    TextInput::make('admin_wa_1')
+                        ->label('Admin WhatsApp 1')
+                        ->tel()
+                        ->maxLength(20),
+
+                    TextInput::make('admin_wa_2')
+                        ->label('Admin WhatsApp 2')
+                        ->tel()
+                        ->maxLength(20),
+
+                    TextInput::make('email')
+                        ->label('Email')
+                        ->email()
+                        ->maxLength(255),
+
                     Fieldset::make('Upload Logo')
                         ->schema([
+                            FileUpload::make('logo_unikom')
+                                ->label('Logo UNIKOM')
+                                ->image()
+                                ->preserveFilenames()
+                                ->disk('public')
+                                ->directory('logo_unikom')
+                                ->openable()
+                                ->previewable()
+                                ->downloadable()
+                                ->maxSize(5120),
+
                             FileUpload::make('logo_hmif')
                                 ->label('Logo HMIF')
                                 ->image()
@@ -52,8 +79,18 @@ public static function form(Form $form): Form
                                 ->openable()
                                 ->previewable()
                                 ->downloadable()
-                                ->maxSize(5120) // max 5 MB
-                                ->columnSpanFull(),
+                                ->maxSize(5120),
+
+                            FileUpload::make('logo_kabinet')
+                                ->label('Logo Kabinet')
+                                ->image()
+                                ->preserveFilenames()
+                                ->disk('public')
+                                ->directory('logo_kabinet')
+                                ->openable()
+                                ->previewable()
+                                ->downloadable()
+                                ->maxSize(5120),
 
                             FileUpload::make('logo_gamatif')
                                 ->label('Logo Gamatif')
@@ -64,8 +101,26 @@ public static function form(Form $form): Form
                                 ->openable()
                                 ->previewable()
                                 ->downloadable()
-                                ->maxSize(5120) // max 5 MB
-                                ->columnSpanFull(),
+                                ->maxSize(5120),
+
+                            FileUpload::make('logo_maskot')
+                                ->label('Logo Maskot')
+                                ->image()
+                                ->preserveFilenames()
+                                ->disk('public')
+                                ->directory('logo_maskot')
+                                ->openable()
+                                ->previewable()
+                                ->downloadable()
+                                ->maxSize(5120),
+                            FileUpload::make('buku_saku')
+                                ->label('Buku Saku (PDF)')
+                                ->acceptedFileTypes(['application/pdf'])
+                                ->preserveFilenames()
+                                ->disk('public')
+                                ->directory('buku_saku')
+                                ->downloadable()
+                                ->maxSize(10240), // max 10 MB
                         ]),
                 ]),
         ]);
