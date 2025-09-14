@@ -4,27 +4,58 @@
         <div
             class="hidden lg:flex w-1/2 bg-gradient-to-br from-yellow-400 to-yellow-600 text-white items-center justify-center"
         >
-            <div class="text-center px-10">
-                <h1 class="text-5xl font-extrabold mb-4 drop-shadow-lg">
-                    Selamat Datang
-                </h1>
-                <p class="text-lg opacity-90">
-                    Mahasiswa Baru Teknik Informatika
-                </p>
-                <!-- <img
-                    src="../../../../public/images/maskot.png"
-                    alt="Illustration"
-                    class="mt-10 max-w-md mx-auto"
-                /> -->
+            <div class="text-center flex items-center justify-center px-10">
+                <div>
+                    <!-- Logo container -->
+                    <div
+                        class="flex items-center justify-center space-x-6 bg-white rounded-full px-8 py-4 mx-auto w-fit shadow-md"
+                    >
+                        <img
+                            src="../../../../public/images/logo-gamatif.png"
+                            class="h-8"
+                            alt="Logo 1"
+                        />
+                        <img
+                            src="../../../../public/images/logo-gamatif.png"
+                            class="h-8"
+                            alt="Logo 2"
+                        />
+                        <img
+                            src="../../../../public/images/logo-gamatif.png"
+                            class="h-8"
+                            alt="Logo 3"
+                        />
+                    </div>
+
+                    <!-- Text -->
+                    <div class="mt-8">
+                        <h1 class="text-5xl font-extrabold mb-4 drop-shadow-lg">
+                            Selamat Datang
+                        </h1>
+                        <p class="text-lg opacity-90">
+                            Mahasiswa Baru Teknik Informatika
+                        </p>
+                        <p class="text-sm opacity-90">
+                            Universitas Komputer Indonesia
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Right Side (Login Form) -->
         <div class="flex-1 flex items-center justify-center bg-gray-50">
             <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">
-                    Login Mahasiswa
-                </h2>
+                <div class="flex justify-center">
+                    <img
+                            src="../../../../public/images/logo-gamatif.png"
+                            class="h-13 mb-6"
+                            alt="Logo 3"
+                        />
+                </div>
+                <!-- <h2 class="text-3xl font-bold text-center text-gray-800 my-6">
+
+                </h2> -->
 
                 <!-- Error Message -->
                 <div

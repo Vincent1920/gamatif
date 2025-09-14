@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "../Stores/authStore";
 
-// 1. Impor komponen halaman yang akan digunakan
 import LandingPage from "../Pages/Public/LandingPage.vue";
 import RegisterPage from "../Pages/Auth/Register.vue";
 import LoginPage from "../Pages/Auth/Login.vue";
 import DashboardMabaPage from "../Pages/Profile/DashboardMaba.vue";
-import { useAuthStore } from "../Stores/authStore";
+import ProfilePage from "../Pages/Profile/DetailProfile.vue";
 
-// 2. Definisikan rute-rute Anda
+
 const routes = [
     {
         path: "/", // Path URL di browser
@@ -30,6 +30,11 @@ const routes = [
         path: "/dashboard-maba",
         name: "dashboard",
         component: DashboardMabaPage,
+    },
+    {
+        path: "/profile-maba",
+        name: "profile",
+        component: ProfilePage,
     },
 ];
 

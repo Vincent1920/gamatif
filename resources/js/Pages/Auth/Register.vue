@@ -30,7 +30,7 @@
                         v-model="form.nama_lengkap"
                         type="text"
                         id="nama_lengkap"
-                        placeholder="Contoh: Rerey"
+                        placeholder="Nama Lengkap Anda"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
                             errors.nama_lengkap
@@ -56,7 +56,7 @@
                         v-model="form.nim"
                         type="text"
                         id="nim"
-                        placeholder="Contoh: 10122074"
+                        placeholder="NIM Anda"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
                             errors.nim ? 'border-red-500' : 'border-gray-300'
@@ -183,7 +183,7 @@
                         v-model="form.email"
                         type="email"
                         id="email"
-                        placeholder="irsyaad.10122074@mahasiswa.unikom.ac.id"
+                        placeholder="email-unikom@mahasiswa.unikom.ac.id"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
                             errors.email ? 'border-red-500' : 'border-gray-300'
@@ -234,11 +234,12 @@
         title="Registrasi Berhasil!"
         :description="successMessage"
         @close="showSuccessModal = false"
+        to="/login-maba"
     />
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { useAuthStore } from "@/Stores/authStore";
 import { storeToRefs } from "pinia";
 import SuccessModal from "../../Components/SuccessModal.vue";
@@ -261,8 +262,23 @@ const form = ref({
     bukti_sosmed: [],
 });
 
+// 2. Definisikan urutan field di form Anda
+const fieldOrder = [
+    "nama_lengkap",
+    "nim",
+    "jenis_kelamin",
+    "tanggal_lahir",
+    "alamat",
+    "nomor_whatsapp",
+    "email",
+    "bukti_registrasi",
+    "bukti_sosmed",
+];
+
 // Computed property untuk validasi form
 const isFormValid = computed(() => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@mahasiswa\.unikom\.ac\.id$/;
+
     return (
         form.value.nama_lengkap.trim() !== "" &&
         form.value.nim.trim() !== "" &&
@@ -270,6 +286,7 @@ const isFormValid = computed(() => {
         form.value.alamat.trim() !== "" &&
         form.value.nomor_whatsapp.trim() !== "" &&
         form.value.email.trim() !== "" &&
+        emailPattern.test(form.value.email.trim()) && // ✅ Validasi domain email
         form.value.bukti_registrasi !== null &&
         form.value.bukti_sosmed.length >= 3
     );
@@ -305,6 +322,27 @@ const handleSubmit = async () => {
             bukti_registrasi: null,
             bukti_sosmed: [],
         };
+    } else {
+        // 3. Tambahkan blok 'else' untuk menangani kegagalan
+
+        // Tunggu DOM selesai diperbarui dengan pesan error
+        await nextTick();
+
+        // Cari field pertama yang memiliki error berdasarkan urutan
+        const firstErrorField = fieldOrder.find((field) => errors.value[field]);
+
+        if (firstErrorField) {
+            // Dapatkan elemen HTML dari field yang error
+            const errorElement = document.querySelector(`#${firstErrorField}`);
+
+            if (errorElement) {
+                // Scroll ke elemen tersebut dengan halus
+                errorElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+        }
     }
 };
 </script>

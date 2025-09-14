@@ -185,4 +185,25 @@ class MahasiswaBaruAuthController extends Controller
             ], 500);
         }
     }
+
+    public function me(Request $request)
+    {
+        try {
+            return response()->json([
+                'message' => 'User data retrieved.',
+                'kode' => 200,
+                'payload' => [
+                    'user' => $request->user(),
+                ],
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat mengambil data user.',
+                'kode' => 500,
+                'payload' => [
+                    'error' => $e->getMessage(),
+                ]
+            ], 500);
+        }
+    }
 }

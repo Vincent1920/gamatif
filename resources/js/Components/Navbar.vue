@@ -40,7 +40,7 @@
                         <span
                             class="hidden md:block ml-3 text-gray-700 font-medium"
                         >
-                            {{ user.nama_lengkap }}
+                            {{ shortName }}
                         </span>
                         <svg
                             class="w-4 h-4 ml-2 text-gray-500"
@@ -175,7 +175,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter, RouterLink } from "vue-router";
 import { useAuthStore } from "@/Stores/authStore";
@@ -192,6 +192,10 @@ const isDropdownOpen = ref(false);
 
 const isScrolled = ref(false);
 
+const shortName = computed(() => {
+    if (!user.value?.nama_lengkap) return "";
+    return user.value.nama_lengkap.split(" ").slice(0, 1).join(" ");
+});
 const handleScroll = () => {
     isScrolled.value = window.scrollY > 10; // jika scroll lebih dari 10px
 };
@@ -222,6 +226,6 @@ async function scrollTo(id) {
 const handleLogout = () => {
     authStore.logout();
     isDropdownOpen.value = false; // Tutup dropdown setelah logout
-    router.push("/login"); // Arahkan pengguna kembali ke halaman login
+    router.push("/"); // Arahkan pengguna kembali ke halaman login
 };
 </script>
