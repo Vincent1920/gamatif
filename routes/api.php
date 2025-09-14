@@ -27,6 +27,7 @@ Route::post('/login', [MahasiswaBaruAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [MahasiswaBaruAuthController::class, 'logout']);
+    Route::get('/me', [MahasiswaBaruAuthController::class, 'me']);
 });
 
 
