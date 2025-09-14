@@ -10,10 +10,4 @@ class ListPengaturanWebs extends ListRecords
 {
     protected static string $resource = PengaturanWebResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
 }
