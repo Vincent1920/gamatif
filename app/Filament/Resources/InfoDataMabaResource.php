@@ -14,6 +14,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\InfoDataMabaResource\Pages;
 use App\Filament\Resources\InfoDataMabaResource\RelationManagers;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use App\Exports\InfoDataMabaExport;
+use App\Models\Kelompok;
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\Select as FormsSelect;
+use Filament\Tables\Actions\Action;
 
 class InfoDataMabaResource extends Resource
 {
@@ -57,6 +63,33 @@ public static function table(Table $table): Table
             ->color(fn ($record) => $record->kelompok ? 'success' : 'danger'),
 
 
+        ])
+        ->headerActions([
+                        Action::make('export_all')
+                ->label('Export Semua')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->action(function () {
+                    return Excel::download(new InfoDataMabaExport(null), 'info_data_maba_all.xlsx');
+                }),
+
+            // Export per kelompok
+            Action::make('export_per_kelompok')
+                ->label('Export per Kelompok')
+                ->icon('heroicon-o-funnel')
+                ->form([
+                    FormsSelect::make('kelompok_id')
+                        ->label('Kelompok')
+                        ->options(fn () => Kelompok::orderBy('nama_kelompok')->pluck('nama_kelompok', 'id')->toArray())
+                        ->searchable()
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $kelompokId = $data['kelompok_id'];
+                    $kelompok = Kelompok::find($kelompokId);
+                    $filename = 'info_data_maba_' . ($kelompok?->nama_kelompok ?? $kelompokId) . '.xlsx';
+
+                    return Excel::download(new InfoDataMabaExport($kelompokId), $filename);
+                }),
         ])
           ->filters([
             // Filter Kelompok
