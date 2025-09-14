@@ -1,7 +1,7 @@
 <template>
     <div
         id="beranda"
-        class="pt-15 sm:pt-40 mb-30 w-full grid grid-cols-1 md:grid-cols-2 items-center"
+        class="pt-15 sm:pt-30 mb-30 w-full grid grid-cols-1 md:grid-cols-2 items-center"
     >
         <div class="text-center md:text-left">
             <h1

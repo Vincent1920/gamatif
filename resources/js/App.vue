@@ -1,11 +1,10 @@
 <template>
     <div class="">
         <Navbar />
-
         <main class="max-w-screen-xl mx-auto p-4 pt-15 min-h-screen">
             <router-view />
         </main>
-        <ContactSection />
+        <!-- <ContactSection /> -->
     </div>
 </template>
 
