@@ -1,36 +1,3 @@
-<script setup>
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/Stores/authStore";
-
-const router = useRouter();
-const authStore = useAuthStore();
-const { user, isAuthenticated } = storeToRefs(authStore);
-
-onMounted(async () => {
-    // Coba auto login kalau belum ada user
-    if (!user.value) {
-        await authStore.tryAutoLogin();
-    }
-
-    // Kalau tetap tidak login, redirect ke halaman login
-    if (!isAuthenticated.value) {
-        router.push("/login");
-    }
-});
-
-const goToProfile = () => {
-    router.push("/profile-maba");
-};
-
-const goToAmbilKelompok = () => {
-
-    router.push("/ambil-kelompok");
-
-};
-</script>
-
 <template>
     <div class="p-8 mt-15" v-if="user">
         <!-- Judul -->
@@ -94,18 +61,15 @@ const goToAmbilKelompok = () => {
                 <h2 class="text-lg font-semibold mb-4 text-gray-800">
                     📅 Jadwal Kegiatan
                 </h2>
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li class="flex items-center justify-between">
-                        <span>PKKMB Hari 1</span>
-                        <span class="text-gray-500">12 Sept</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span>PKKMB Hari 2</span>
-                        <span class="text-gray-500">13 Sept</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span>Pengarahan Akademik</span>
-                        <span class="text-gray-500">14 Sept</span>
+                <!-- Tampilan Loading -->
+                <div v-if="isJadwalLoading" class="text-sm text-gray-500">Memuat jadwal...</div>
+                <!-- Tampilan Error -->
+                <div v-if="jadwalError" class="text-sm text-red-500">{{ jadwalError }}</div>
+                <!-- Tampilan Data -->
+                <ul v-else class="space-y-2 text-sm text-gray-700">
+                    <li v-for="item in jadwalKegiatan" :key="item.id" class="flex items-center justify-between">
+                        <span>{{ item.kegiatan }}</span>
+                        <span class="text-gray-500 font-medium">{{ item.tanggal }}</span>
                     </li>
                 </ul>
             </div>
@@ -127,22 +91,74 @@ const goToAmbilKelompok = () => {
                 </div>
             </div>
 
-            <!-- Statistik -->
+            <!-- Sosial Media -->
             <div
                 class="md:col-span-3 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 transition"
             >
-                <h2 class="text-lg font-semibold mb-4">
+                <h2 class="text-lg font-semibold mb-4 text-gray-800">
                     📲 Jangan Lupa Follow Yaa!!
                 </h2>
-                <div class="space-y-3 text-sm text-gray-600">
-                    <p class="border-l-4 border-yellow-400 pl-3">
-                        Instagram HMIF
-                    </p>
-                    <p class="border-l-4 border-yellow-400 pl-3">
-                        Instagram GAMATIF
-                    </p>
+                <!-- Tampilan Loading -->
+                <div v-if="isSosmedLoading" class="text-sm text-gray-500">Memuat link...</div>
+                <!-- Tampilan Error -->
+                <div v-if="sosmedError" class="text-sm text-red-500">{{ sosmedError }}</div>
+                
+                <!-- Tampilan Data -->
+                <div v-else class="space-y-3 text-sm">
+                    <a v-for="item in sosialMedia" :key="item.id" :href="item.url" target="_blank" 
+                       class="block border-l-4 border-yellow-500 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-r-md text-gray-700 dark:text-gray-300 hover:bg-yellow-100 dark:hover:bg-gray-700 transition font-medium">
+                        {{ item.nama }}
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script setup>
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/Stores/authStore";
+import { useJadwalKegiatanStore } from "@/Stores/jadwalKegiatanStore";
+import { useSosialMediaStore } from "@/Stores/sosialMediaStore";
+
+const router = useRouter();
+
+// Main Auth Store
+const authStore = useAuthStore();
+const { user, isAuthenticated } = storeToRefs(authStore);
+
+// Jadwal Kegiatan Store
+const jadwalStore = useJadwalKegiatanStore();
+const { jadwalKegiatan, isLoading: isJadwalLoading, error: jadwalError } = storeToRefs(jadwalStore);
+
+// Sosial Media Store
+const sosmedStore = useSosialMediaStore();
+const { sosialMedia, isLoading: isSosmedLoading, error: sosmedError } = storeToRefs(sosmedStore);
+
+onMounted(async () => {
+    // Coba auto login
+    if (!user.value) {
+        await authStore.tryAutoLogin();
+    }
+
+    // Redirect jika tidak login
+    if (!isAuthenticated.value) {
+        router.push("/login");
+    } else {
+        // Ambil data dari API jika sudah login
+        jadwalStore.fetchJadwalKegiatan();
+        sosmedStore.fetchSosialMedia();
+    }
+});
+
+const goToProfile = () => {
+    router.push("/profile-maba");
+};
+
+const goToAmbilKelompok = () => {
+    router.push("/ambil-kelompok");
+};
+</script>
+
