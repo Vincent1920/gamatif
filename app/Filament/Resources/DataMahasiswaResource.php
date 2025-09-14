@@ -30,6 +30,7 @@ class DataMahasiswaResource extends Resource
 
     protected static ?string $navigationGroup = 'Data Master';
     protected static ?string $pluralModelLabel = 'Data Mahasiswa';
+        protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

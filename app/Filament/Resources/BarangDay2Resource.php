@@ -20,6 +20,7 @@ class BarangDay2Resource extends Resource
 {
     protected static ?string $model = BarangDay2::class;
 
+protected static ?int $navigationSort = 3;
     
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

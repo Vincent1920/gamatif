@@ -30,8 +30,23 @@ class BarangSitaanResource extends Resource
     protected static ?string $navigationGroup = 'Barang Bawaan';
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
+protected static ?int $navigationSort = 3;
 
  protected static ?string $pluralModelLabel = 'Barang Sitaan';
+
+    public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
+    $user = auth()->user();
+
+    // Jika login bukan admin, filter berdasarkan kelompok
+    if ($user->email !== 'admin@gmail.com') {
+        $kelompokId = $user->kelompok_id;
+        $query->where('kelompok_id', $kelompokId);
+    }
+
+    return $query;
+}
 
 public static function form(Form $form): Form
 {

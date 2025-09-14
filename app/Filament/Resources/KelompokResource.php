@@ -23,7 +23,7 @@ class KelompokResource extends Resource
     protected static ?string $pluralLabel = 'Kelompok';
       protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Data Master';
-
+  protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -34,7 +34,13 @@ class KelompokResource extends Resource
                 ->required()
                 ->maxLength(255)
                 ->placeholder('Masukkan nama kelompok'),
+                 TextInput::make('url_grub')
+                ->label('Link Grup')
+                ->url() // otomatis validasi format URL
+                ->maxLength(255)
+                ->placeholder('Masukkan link grup (misal: https://chat.whatsapp.com/xxx)'),
         ]);
+
     }
      public static function table(Table $table): Table
     {
@@ -45,6 +51,10 @@ class KelompokResource extends Resource
                     ->sortable(),
                 TextColumn::make('nama_kelompok')
                     ->label('Nama Kelompok')
+                    ->searchable()
+                    ->sortable(),
+                    TextColumn::make('url_grub')
+                    ->label('url grub')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
