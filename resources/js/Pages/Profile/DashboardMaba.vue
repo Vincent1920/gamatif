@@ -65,9 +65,9 @@
                 <div v-if="jadwalError" class="text-sm text-red-500">{{ jadwalError }}</div>
                 <!-- Tampilan Data -->
                 <ul v-else class="space-y-2 text-sm text-gray-700">
-                    <li v-for="item in jadwalKegiatan" :key="item.id" class="flex items-center justify-between">
-                        <span>{{ item.kegiatan }}</span>
-                        <span class="text-gray-500 font-medium">{{ item.tanggal }}</span>
+                    <li v-for="item in jadwalKegiatan" :key="item.id" class="border-b pb-2">
+                        <div class="font-semibold">{{ item.nama }}</div>
+                        <div class="text-gray-500">{{ item.tanggal }} | {{ item.waktu_mulai }} - {{ item.waktu_selesai }}</div>
                     </li>
                 </ul>
             </div>
@@ -81,10 +81,7 @@
                 </h2>
                 <div class="space-y-3 text-sm text-gray-600">
                     <p class="border-l-4 border-yellow-400 pl-3">
-                        Harap membawa KTM sementara saat hadir PKKMB
-                    </p>
-                    <p class="border-l-4 border-yellow-400 pl-3">
-                        Follow Instagram @gamatif untuk info terbaru
+                        Coming Soon ✨
                     </p>
                 </div>
             </div>

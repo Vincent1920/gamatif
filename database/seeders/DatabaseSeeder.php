@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Kelompok;
 use App\Models\DataMahasiswa;
 use Database\Seeders\MahasiswaBaruSeeder;
+use Database\Seeders\JadwalKegiatanSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             MahasiswaBaruSeeder::class,
+            JadwalKegiatanSeeder::class,
         ]);
         // Daftar nama kelompok
         $kelompokNames = [
