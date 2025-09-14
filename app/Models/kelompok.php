@@ -7,35 +7,39 @@ use App\Models\IzinKehadiran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class kelompok extends Model
+class Kelompok extends Model
 {
     use HasFactory;
-     protected $fillable = [
+    protected $fillable = [
         'nama_kelompok',
         'url_grub'
     ];
 
-     public function dataMahasiswa()
+    public function dataMahasiswa()
     {
-        return $this->hasMany(DataMahasiswa::class, 'kelompok_id'); 
+        return $this->hasMany(DataMahasiswa::class, 'kelompok_id');
         // 'kelompok' = FK di data_mahasiswa
     }
     // app/Models/Kelompok.php
-// public function mahasiswas()
-// {
-//     return $this->hasMany(DataMahasiswa::class, 'kelompok_id','kelompok', 'id');
-// }
-public function mahasiswa()
-{
-    return $this->belongsTo(DataMahasiswa::class, 'id');
-}
+    // public function mahasiswas()
+    // {
+    //     return $this->hasMany(DataMahasiswa::class, 'kelompok_id','kelompok', 'id');
+    // }
+    public function mahasiswa()
+    {
+        return $this->belongsTo(DataMahasiswa::class, 'id');
+    }
 
+    public function mahasiswaBaru()
+    {
+        return $this->hasMany(MahasiswaBaru::class, 'kelompok_id');
+    }
 
-     public function user()
+    public function user()
     {
         return $this->belongsTo(user::class);
     }
-     public function IzinKehadiran()
+    public function IzinKehadiran()
     {
         return $this->hasMany(IzinKehadiran::class);
     }
