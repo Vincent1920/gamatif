@@ -49,12 +49,16 @@ public static function table(Table $table): Table
                 ->sortable()
                 ->searchable(),
 
-            TextColumn::make('kelompok.nama_kelompok')
-                ->label('Kelompok')
-                ->sortable()
-                ->searchable(),
+        TextColumn::make('kelompok.nama_kelompok')
+            ->label('Kelompok')
+            ->sortable()
+            ->searchable()
+            ->getStateUsing(fn ($record) => $record->kelompok->nama_kelompok ?? 'Maba belum ambil kelompok')
+            ->color(fn ($record) => $record->kelompok ? 'success' : 'danger'),
+
+
         ])
-         ->filters([
+          ->filters([
             // Filter Kelompok
             \Filament\Tables\Filters\SelectFilter::make('kelompok_id')
                 ->label('Kelompok')
@@ -65,13 +69,8 @@ public static function table(Table $table): Table
                 )
                 ->searchable(),
                 ]);
-        // ->filters([
-        //     SelectFilter::make('id')
-        //         ->label('Filter Kelompok')
-        //         ->relationship('kelompok', 'nama_kelompok') // ambil relasi
-        //         ->searchable(), // bisa cari nama kelompok
-        // ]);
 }
+
     public static function getRelations(): array
     {
         return [
