@@ -84,21 +84,23 @@
             <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8 px-8">
                 <div class="md:flex md:justify-between">
                     <div class="mb-6 flex md:mb-0">
-                        <img
-                            src="https://flowbite.com/docs/images/logo.svg"
-                            class="h-8 me-3"
-                            alt="FlowBite Logo"
-                        />
-                        <img
-                            src="https://flowbite.com/docs/images/logo.svg"
-                            class="h-8 me-3"
-                            alt="FlowBite Logo"
-                        />
-                        <img
-                            src="https://flowbite.com/docs/images/logo.svg"
-                            class="h-8 me-3"
-                            alt="FlowBite Logo"
-                        />
+                        <div class="mb-6 flex md:mb-0">
+                            <img
+                                :src="logoUnikomUrl"
+                                class="h-15 me-3"
+                                alt="Logo UNIKOM"
+                            />
+                            <img
+                                :src="logoHMIFtUrl"
+                                class="h-15 me-3"
+                                alt="Logo HMIF"
+                            />
+                            <img
+                                :src="logoKabinetUrl"
+                                class="h-15 me-3"
+                                alt="Logo Kabinet"
+                            />
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
@@ -267,45 +269,55 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
+import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
+import { storeToRefs } from "pinia";
 
-// State reaktif untuk menampung data form
-const form = ref({
-    name: "",
-    message: "",
-});
-
-// State reaktif untuk status checkbox "Anonim"
-// Kita set default 'true' agar cocok dengan tampilan awal
+// Store form pesan
+const form = ref({ name: "", message: "" });
 const isAnonymous = ref(true);
 
-// Menggunakan 'watch' untuk mereaksi perubahan pada checkbox
+// Watcher untuk toggle anonim
 watch(
     isAnonymous,
     (newValue) => {
-        if (newValue) {
-            // Jika checkbox dicentang
-            form.value.name = "Anonim";
-        } else {
-            // Jika checkbox tidak dicentang
-            form.value.name = "";
-        }
+        form.value.name = newValue ? "Anonim" : "";
     },
     { immediate: true }
-); // 'immediate: true' agar watch berjalan saat komponen pertama kali dimuat
+);
 
+// Kirim pesan
 const handleSubmit = () => {
-    console.log("Data Form:", form.value);
-
     const displayName =
         form.value.name === "Anonim" ? "Pengirim Anonim" : form.value.name;
-
     alert(`Terima kasih, ${displayName}! Pesanmu sudah kami terima.`);
-
-    // Reset form
     form.value.message = "";
-    if (!isAnonymous.value) {
-        form.value.name = "";
-    }
+    if (!isAnonymous.value) form.value.name = "";
 };
+
+// ==============================
+// AMBIL LOGO DARI API
+// ==============================
+const pengaturanWebStore = usePengaturanWebStore();
+const { pengaturanWeb } = storeToRefs(pengaturanWebStore);
+
+onMounted(() => {
+    pengaturanWebStore.fetchPengaturanWeb();
+});
+
+const baseURL = window.location.origin;
+const logoUnikomUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-unikom.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_unikom}`;
+});
+
+const logoHMIFtUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-hmif.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_hmif}`;
+});
+
+const logoKabinetUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-kabinet.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_kabinet}`;
+});
 </script>
