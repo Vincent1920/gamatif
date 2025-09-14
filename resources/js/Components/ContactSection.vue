@@ -1,15 +1,15 @@
 <template>
     <div
         id="kontak"
-        class="relative pt-16 sm:pt-24 mt-30 bg-gray-200 dark:bg-gray-900 rounded-t-full"
+        class="relative pt-16 sm:pt-24 mt-30 bg-gray-900 rounded-t-full"
     >
         <div class="max-w-2xl mx-auto px-4 pt-20 text-center z-10 relative">
             <h2
-                class="text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900 dark:text-white"
+                class="text-3xl font-extrabold tracking-tight sm:text-4xl text-white"
             >
                 Tinggalkan Pesan & Kesan
             </h2>
-            <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">
+            <p class="mt-4 text-lg text-gray-400">
                 Bagikan harapan atau kesan pertamamu sebagai bagian dari
                 keluarga besar Teknik Informatika!
             </p>
@@ -25,9 +25,9 @@
                             name="name"
                             id="name"
                             required
-                            class="block w-full px-4 py-3 rounded-md bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+                            class="block w-full px-4 py-3 rounded-md bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
                             :class="{
-                                'bg-gray-200 dark:bg-gray-800 cursor-not-allowed':
+                                'bg-gray-800 cursor-not-allowed':
                                     isAnonymous,
                             }"
                             placeholder="Nama Lengkap"
@@ -38,11 +38,11 @@
                             id="checked-checkbox"
                             type="checkbox"
                             v-model="isAnonymous"
-                            class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            class="w-4 h-4 text-yellow-600  rounded focus:ring-yellow-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
                         />
                         <label
                             for="checked-checkbox"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            class="ms-2 text-sm font-medium text-gray-300"
                             >Anonim</label
                         >
                     </div>
@@ -103,7 +103,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
+                    <!-- <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
                         <div>
                             <h2
                                 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
@@ -154,7 +154,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <hr
                     class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
@@ -167,7 +167,7 @@
                             >HMIF | Dakshawira</a
                         >. All Rights Reserved.
                     </span>
-                    <div class="flex mt-4 sm:justify-center sm:mt-0">
+                    <!-- <div class="flex mt-4 sm:justify-center sm:mt-0">
                         <a
                             href="#"
                             class="text-gray-500 hover:text-gray-900 dark:hover:text-white"
@@ -261,7 +261,7 @@
                             </svg>
                             <span class="sr-only">Dribbble account</span>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </footer>
