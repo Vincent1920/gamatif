@@ -42,4 +42,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/kelompok/generate', [KelompokGeneratorController::class, 'generate']);
 
     
+
 });
