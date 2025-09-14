@@ -7,9 +7,13 @@ export const useAuthStore = defineStore("auth", () => {
     const user = ref(null);
     const token = ref(localStorage.getItem("authToken") || null);
     const errors = ref({});
+    const kelompok = ref(null);
     const isLoading = ref(false);
     const successMessage = ref("");
 
+    const clearErrors = () => {
+        errors.value = {};
+    };
     // --- GETTERS ---
     const isAuthenticated = computed(() => !!token.value && !!user.value);
 
@@ -145,9 +149,45 @@ export const useAuthStore = defineStore("auth", () => {
         }
     };
 
+    const getKelompokStatus = async () => {
+        if (!isAuthenticated.value) return;
+        isLoading.value = true;
+        try {
+            const response = await api.get("/kelompok/status");
+            kelompok.value = response.data.payload;
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                kelompok.value = null; // Pengguna belum punya kelompok
+            } else {
+                console.error("Gagal mengambil status kelompok:", error);
+            }
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
+    const generateKelompok = async () => {
+        isLoading.value = true;
+        errors.value = {};
+        try {
+            const response = await api.post("/kelompok/generate");
+            kelompok.value = response.data.payload; // Update state dengan kelompok baru
+            return true;
+        } catch (error) {
+            console.error("Gagal generate kelompok:", error);
+            if (error.response && error.response.data.message) {
+                alert(error.response.data.message);
+            }
+            return false;
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
     return {
         user,
         token,
+        kelompok,
         errors,
         isLoading,
         successMessage,
@@ -155,8 +195,11 @@ export const useAuthStore = defineStore("auth", () => {
         register,
         login,
         logout,
+        clearErrors,
         tryAutoLogin,
-        updateProfile, // <--- baru
-        updatePassword, // <--- baru
+        updateProfile,
+        updatePassword,
+        getKelompokStatus,
+        generateKelompok,
     };
 });

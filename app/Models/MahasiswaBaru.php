@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class MahasiswaBaru extends Authenticatable
 {
-    use HasFactory,HasApiTokens, Notifiable;
+    use HasFactory, HasApiTokens, Notifiable;
 
     protected $table = 'mahasiswa_baru';
 
@@ -32,13 +32,17 @@ class MahasiswaBaru extends Authenticatable
         'password',
     ];
 
-    /**
-     * --- TAMBAHAN DI SINI ---
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
-        'bukti_sosmed' => 'array', // Otomatis konversi array ke JSON dan sebaliknya
+        'bukti_sosmed' => 'array',
     ];
+
+    /**
+     * Mendefinisikan relasi bahwa MahasiswaBaru ini milik satu Kelompok.
+     */
+    public function kelompok()
+    {
+        // Relasi 'belongsTo' ke model Kelompok.
+        // Laravel akan otomatis mencari foreign key 'kelompok_id' di tabel ini.
+        return $this->belongsTo(Kelompok::class, 'kelompok_id');
+    }
 }
