@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MahasiswaBaruAuthController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\KelompokGeneratorController;
+use App\Http\Controllers\Api\PengaturanWebController;
 
 
 /*
@@ -21,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/pengaturan-web', [PengaturanWebController::class, 'index']);
+
 
 
 Route::post('/register', [MahasiswaBaruAuthController::class, 'register']);
@@ -33,4 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+
+    Route::get('/kelompok/status', [KelompokGeneratorController::class, 'getStatus']);
+    Route::post('/kelompok/generate', [KelompokGeneratorController::class, 'generate']);
+
+    
+
 });
