@@ -37,13 +37,7 @@ Route::post('/login', [MahasiswaBaruAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [MahasiswaBaruAuthController::class, 'logout']);
-    Route::get('/me', function (Request $request) {
-        // Ambil user yang sedang login dan 'eager load' relasi kelompok-nya
-        $user = $request->user()->load('kelompok');
-        return response()->json([
-            'payload' => $user
-        ]);
-    });
+    Route::get('/me', [MahasiswaBaruAuthController::class, 'me']);
 
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
