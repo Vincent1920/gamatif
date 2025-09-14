@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\SosialMediaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MahasiswaBaruAuthController;
@@ -24,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/pengaturan-web', [PengaturanWebController::class, 'index']);
-
+Route::get('/sosial-media', [SosialMediaController::class, 'index']);
 
 
 Route::post('/register', [MahasiswaBaruAuthController::class, 'register']);
