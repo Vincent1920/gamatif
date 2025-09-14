@@ -14,11 +14,7 @@
                 to="/"
                 class="flex items-center space-x-3 rtl:space-x-reverse"
             >
-                <img
-                    src="../../../public/images/logo-gamatif.png"
-                    class="h-10"
-                    alt="Gamatif Logo"
-                />
+                <img :src="logoGamatifUrl" class="h-10" alt="Gamatif Logo" />
             </router-link>
 
             <div
@@ -175,11 +171,28 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter, RouterLink } from "vue-router";
 import { useAuthStore } from "@/Stores/authStore";
-import { onMounted, onUnmounted } from "vue";
+import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
+
+const pengaturanWebStore = usePengaturanWebStore();
+const { pengaturanWeb } = storeToRefs(pengaturanWebStore);
+
+onMounted(() => {
+    pengaturanWebStore.fetchPengaturanWeb();
+});
+
+const baseURL = window.location.origin;
+
+// Buat computed biar rapi
+const logoGamatifUrl = computed(() => {
+    if (pengaturanWeb.value[0]?.logo_gamatif) {
+        return `${baseURL}/storage/${pengaturanWeb.value[0].logo_gamatif}`;
+    }
+    return "/images/logo-gamatif.png"; // fallback default
+});
 
 const router = useRouter();
 const authStore = useAuthStore();
