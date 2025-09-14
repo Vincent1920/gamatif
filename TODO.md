@@ -1,3 +1,0 @@
-- [x] Create PengaturanWebController.php in app/Http/Controllers/Api/
-- [x] Add GET route /api/pengaturan-web in routes/api.php
-- [x] Create pengaturanWebStore.js in resources/js/Stores/
