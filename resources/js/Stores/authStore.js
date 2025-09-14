@@ -87,10 +87,9 @@ export const useAuthStore = defineStore("auth", () => {
                 "Authorization"
             ] = `Bearer ${savedToken}`;
 
-            // Pastikan endpoint ini ada di backend-mu
             const response = await api.get("/me");
             user.value =
-                response.data.payload.user ??
+                response.data.payload?.user ??
                 response.data.user ??
                 response.data;
         } catch (error) {
@@ -98,6 +97,51 @@ export const useAuthStore = defineStore("auth", () => {
             user.value = null;
             token.value = null;
             localStorage.removeItem("authToken");
+        }
+    };
+
+    // --- UPDATE PROFILE ---
+    const updateProfile = async (formData) => {
+        isLoading.value = true;
+        errors.value = {};
+        try {
+            const response = await api.put("/profile", formData);
+            user.value = response.data.user; // update state user
+            successMessage.value = "Profil berhasil diperbarui";
+            return true;
+        } catch (error) {
+            if (error.response?.status === 422) {
+                errors.value = error.response.data.errors;
+            } else {
+                console.error("Update Profile Error:", error);
+                errors.value = { general: ["Gagal memperbarui profil."] };
+            }
+            return false;
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
+    // --- UPDATE PASSWORD ---
+    const updatePassword = async (payload) => {
+        isLoading.value = true;
+        errors.value = {};
+        try {
+            await api.put("/profile/password", payload);
+            successMessage.value = "Password berhasil diubah";
+            return true;
+        } catch (error) {
+            if (error.response?.status === 422) {
+                errors.value = error.response.data.errors;
+            } else if (error.response?.status === 400) {
+                errors.value = { general: [error.response.data.message] };
+            } else {
+                console.error("Update Password Error:", error);
+                errors.value = { general: ["Gagal mengubah password."] };
+            }
+            return false;
+        } finally {
+            isLoading.value = false;
         }
     };
 
@@ -111,6 +155,8 @@ export const useAuthStore = defineStore("auth", () => {
         register,
         login,
         logout,
-        tryAutoLogin, // <--- jangan lupa diexport
+        tryAutoLogin,
+        updateProfile, // <--- baru
+        updatePassword, // <--- baru
     };
 });

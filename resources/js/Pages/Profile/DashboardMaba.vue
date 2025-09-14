@@ -1,9 +1,40 @@
+<script setup>
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/Stores/authStore";
+
+const router = useRouter();
+const authStore = useAuthStore();
+const { user, isAuthenticated } = storeToRefs(authStore);
+
+onMounted(async () => {
+    // Coba auto login kalau belum ada user
+    if (!user.value) {
+        await authStore.tryAutoLogin();
+    }
+
+    // Kalau tetap tidak login, redirect ke halaman login
+    if (!isAuthenticated.value) {
+        router.push("/login");
+    }
+});
+
+const goToProfile = () => {
+    router.push("/profile-maba");
+};
+
+const goToAmbilKelompok = () => {
+    router.push("/AmbilKelompok");
+};
+</script>
+
 <template>
-    <div class="p-8 mt-15">
+    <div class="p-8 mt-15" v-if="user">
         <!-- Judul -->
         <h1 class="text-3xl font-bold mb-8 text-gray-800">
             Selamat Datang,
-            <span class="text-yellow-600">Nama Mahasiswa</span> 🎉
+            <span class="text-yellow-600">{{ user.nama_lengkap }}</span> 🎉
         </h1>
 
         <!-- Grid Bento -->
@@ -13,19 +44,43 @@
                 class="md:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 flex flex-col items-center justify-center transition"
             >
                 <img
-                    src="https://ui-avatars.com/api/?name=M+Mahasiswa&background=eab308&color=fff"
+                    :src="`https://ui-avatars.com/api/?name=${user.nama_lengkap}&background=eab308&color=fff`"
                     class="w-20 h-20 rounded-full mb-4"
                 />
                 <h2 class="text-xl font-semibold text-gray-800">
-                    Nama Mahasiswa
+                    {{ user.nama_lengkap }}
                 </h2>
-                <p class="text-sm text-gray-500">NIM: 12345678</p>
-                <p class="text-sm text-gray-500">Kelompok: <span class="text-gray-300">belum mengambil kelompok</span></p>
-                <button
-                    class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-yellow-600"
-                >
-                    Lihat Profil
-                </button>
+                <p class="text-sm text-gray-500">NIM: {{ user.nim }}</p>
+
+                <p class="text-sm text-gray-500">
+                    Kelompok:
+                    <span
+                        v-if="user.kelompok"
+                        class="text-gray-800 font-medium"
+                    >
+                        {{ user.kelompok.nama }}
+                    </span>
+                    <span v-else class="text-gray-300"
+                        >belum mengambil kelompok</span
+                    >
+                </p>
+
+                <div class="flex gap-2 mt-4">
+                    <button
+                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-yellow-600"
+                        @click="goToProfile"
+                    >
+                        Lihat Profil
+                    </button>
+
+                    <button
+                        v-if="!user.kelompok"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600"
+                        @click="goToAmbilKelompok"
+                    >
+                        Ambil Kelompok
+                    </button>
+                </div>
             </div>
 
             <!-- Jadwal -->
