@@ -82,6 +82,7 @@
 
           <div>
             <label class="block text-sm text-gray-600 mb-1">Password Baru</label>
+            <label class="block text-xs text-gray-500 mb-1">Harus Kombinasi Huruf dan Angka ya, Contoh : gamatif2025</label>
             <input v-model="password.new" type="password"
               class="w-full rounded-lg border-gray-300 focus:ring-yellow-400 focus:border-yellow-400" />
           </div>

@@ -27,9 +27,7 @@
                         v-if="user.kelompok"
                         class="text-gray-800 font-medium"
                     >
-
                         {{ user.kelompok.nama_kelompok }}
-
                     </span>
                     <span v-else class="text-gray-300"
                         >belum mengambil kelompok</span
@@ -62,14 +60,25 @@
                     📅 Jadwal Kegiatan
                 </h2>
                 <!-- Tampilan Loading -->
-                <div v-if="isJadwalLoading" class="text-sm text-gray-500">Memuat jadwal...</div>
+                <div v-if="isJadwalLoading" class="text-sm text-gray-500">
+                    Memuat jadwal...
+                </div>
                 <!-- Tampilan Error -->
-                <div v-if="jadwalError" class="text-sm text-red-500">{{ jadwalError }}</div>
+                <div v-if="jadwalError" class="text-sm text-red-500">
+                    {{ jadwalError }}
+                </div>
                 <!-- Tampilan Data -->
                 <ul v-else class="space-y-2 text-sm text-gray-700">
-                    <li v-for="item in jadwalKegiatan" :key="item.id" class="border-b pb-2">
+                    <li
+                        v-for="item in jadwalKegiatan"
+                        :key="item.id"
+                        class="border-b pb-2"
+                    >
                         <div class="font-semibold">{{ item.nama }}</div>
-                        <div class="text-gray-500">{{ item.tanggal }} | {{ item.waktu_mulai }} - {{ item.waktu_selesai }}</div>
+                        <div class="text-gray-500">
+                            {{ item.tanggal }} | {{ item.waktu_mulai }} -
+                            {{ item.waktu_selesai }}
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -96,14 +105,23 @@
                     📲 Jangan Lupa Follow Yaa!!
                 </h2>
                 <!-- Tampilan Loading -->
-                <div v-if="isSosmedLoading" class="text-sm text-gray-500">Memuat link...</div>
+                <div v-if="isSosmedLoading" class="text-sm text-gray-500">
+                    Memuat link...
+                </div>
                 <!-- Tampilan Error -->
-                <div v-if="sosmedError" class="text-sm text-red-500">{{ sosmedError }}</div>
-                
+                <div v-if="sosmedError" class="text-sm text-red-500">
+                    {{ sosmedError }}
+                </div>
+
                 <!-- Tampilan Data -->
                 <div v-else class="space-y-3 text-sm">
-                    <a v-for="item in sosialMedia" :key="item.id" :href="item.url" target="_blank" 
-                       class="block border-l-4 border-yellow-500 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-r-md text-gray-700 dark:text-gray-300 hover:bg-yellow-100 dark:hover:bg-gray-700 transition font-medium">
+                    <a
+                        v-for="item in sosialMedia"
+                        :key="item.id"
+                        :href="item.url"
+                        target="_blank"
+                        class="block border-l-4 border-yellow-500 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-r-md text-gray-700 dark:text-gray-300 hover:bg-yellow-100 dark:hover:bg-gray-700 transition font-medium"
+                    >
                         {{ item.nama }}
                     </a>
                 </div>
@@ -113,41 +131,65 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, watch } from "vue"; // 1. Impor 'watch'
+import { useRouter, useRoute } from "vue-router"; // 2. Impor 'useRoute'
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/Stores/authStore";
 import { useJadwalKegiatanStore } from "@/Stores/jadwalKegiatanStore";
 import { useSosialMediaStore } from "@/Stores/sosialMediaStore";
 
 const router = useRouter();
+const route = useRoute(); // 3. Dapatkan objek rute saat ini
 
-// Main Auth Store
+// --- Stores ---
 const authStore = useAuthStore();
 const { user, isAuthenticated } = storeToRefs(authStore);
-
-// Jadwal Kegiatan Store
 const jadwalStore = useJadwalKegiatanStore();
-const { jadwalKegiatan, isLoading: isJadwalLoading, error: jadwalError } = storeToRefs(jadwalStore);
-
-// Sosial Media Store
+const {
+    jadwalKegiatan,
+    isLoading: isJadwalLoading,
+    error: jadwalError,
+} = storeToRefs(jadwalStore);
 const sosmedStore = useSosialMediaStore();
-const { sosialMedia, isLoading: isSosmedLoading, error: sosmedError } = storeToRefs(sosmedStore);
+const {
+    sosialMedia,
+    isLoading: isSosmedLoading,
+    error: sosmedError,
+} = storeToRefs(sosmedStore);
+
+// 4. Buat fungsi terpusat untuk mengambil data
+const fetchData = () => {
+    if (isAuthenticated.value) {
+        jadwalStore.fetchJadwalKegiatan();
+        sosmedStore.fetchSosialMedia();
+        authStore.tryAutoLogin();
+    }
+};
+
+// 5. Awasi perubahan pada rute
+watch(
+    () => route.path,
+    (newPath) => {
+        // Jika pengguna bernavigasi KE halaman ini, panggil fetchData
+        if (newPath === "/dashboard-maba") {
+            // Pastikan path ini sesuai dengan rute Anda
+            fetchData();
+        }
+    },
+    { immediate: true } // immediate: true akan menjalankan watch ini saat komponen pertama kali dimuat
+);
 
 onMounted(async () => {
-    // Coba auto login
+    // Coba auto login jika data user belum ada
     if (!user.value) {
         await authStore.tryAutoLogin();
     }
 
-    // Redirect jika tidak login
+    // Redirect jika tetap tidak login
     if (!isAuthenticated.value) {
         router.push("/login");
-    } else {
-        // Ambil data dari API jika sudah login
-        jadwalStore.fetchJadwalKegiatan();
-        sosmedStore.fetchSosialMedia();
     }
+    // Tidak perlu memanggil fetchData() lagi di sini karena `watch` dengan `immediate: true` sudah menanganinya.
 });
 
 const goToProfile = () => {
@@ -158,4 +200,3 @@ const goToAmbilKelompok = () => {
     router.push("/ambil-kelompok");
 };
 </script>
-

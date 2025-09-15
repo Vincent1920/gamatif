@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\MahasiswaBaruAuthController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\KelompokGeneratorController;
 use App\Http\Controllers\Api\PengaturanWebController;
+use App\Http\Controllers\Api\KritikSaranController;
 
 
 /*
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/pengaturan-web', [PengaturanWebController::class, 'index']);
 Route::get('/sosial-media', [SosialMediaController::class, 'index']);
 Route::get('/jadwal-kegiatan', [JadwalKegiatanController::class, 'index']);
+Route::post('/kritik-saran', [KritikSaranController::class, 'store']);
 
 
 Route::post('/register', [MahasiswaBaruAuthController::class, 'register']);
@@ -43,7 +45,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/kelompok/status', [KelompokGeneratorController::class, 'getStatus']);
     Route::post('/kelompok/generate', [KelompokGeneratorController::class, 'generate']);
-
-    
-
 });
