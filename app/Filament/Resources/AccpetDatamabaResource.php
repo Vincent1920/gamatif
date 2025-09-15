@@ -38,6 +38,16 @@ class AccpetDatamabaResource extends Resource
    public static function table(Table $table): Table
 {
     return $table
+      ->modifyQueryUsing(function ($query) {
+            return $query->orderByRaw("
+                CASE 
+                    WHEN status = 'tidak_aktif' THEN 0
+                    WHEN status IS NULL THEN 1
+                    ELSE 2
+                END
+            ")->orderBy('nama_lengkap', 'asc'); // opsional, biar tetap rapi
+        })
+        
         ->columns([
             TextColumn::make('nim')
                 ->label('NIM')
@@ -48,10 +58,6 @@ class AccpetDatamabaResource extends Resource
                 ->label('Nama Lengkap')
                 ->searchable()
                 ->sortable(),
-
-       
-
-    
             TextColumn::make('nomor_whatsapp')
                 ->label('No. WhatsApp'),
 
