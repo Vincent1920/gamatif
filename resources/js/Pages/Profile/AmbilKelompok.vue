@@ -147,10 +147,12 @@
 
 <script setup>
 import { onMounted, ref, watch, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
 import { useAuthStore } from "@/Stores/authStore";
 import { storeToRefs } from "pinia";
 import confetti from "canvas-confetti";
 
+const router = useRouter();
 const authStore = useAuthStore();
 const { kelompok, isLoading, errors, isAuthenticated } = storeToRefs(authStore);
 
@@ -250,6 +252,10 @@ const handleGenerate = async () => {
                 origin: { y: 0.6 },
                 colors: ["#f59e0b", "#10b981", "#3b82f6", "#ef4444", "#8b5cf6"],
             });
+            // Redirect to dashboard after success
+            setTimeout(() => {
+                router.push('/dashboard-maba');
+            }, 2000); // Wait 2 seconds for confetti
         }
     } catch (error) {
         clearInterval(randomizeInterval);
