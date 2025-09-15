@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\SosialMediaController;
-use App\Http\Controllers\Api\JadwalKegiatanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\SosialMediaController;
+use App\Http\Controllers\Api\JadwalKegiatanController;
 use App\Http\Controllers\Api\MahasiswaBaruAuthController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\KelompokGeneratorController;

@@ -19,7 +19,18 @@
                 {{ errors.general[0] }}
             </div>
 
-            <form @submit.prevent="handleSubmit" class="space-y-6">
+            <!-- Validation Errors (Frontend) -->
+            <div
+                v-if="validationErrors.length > 0"
+                class="mb-4 p-4 bg-red-100 text-red-800 border border-red-300 rounded-lg"
+            >
+                <h4 class="font-semibold mb-2">Harap lengkapi data berikut:</h4>
+                <ul class="list-disc list-inside space-y-1">
+                    <li v-for="error in validationErrors" :key="error">{{ error }}</li>
+                </ul>
+            </div>
+
+            <form class="space-y-6">
                 <div>
                     <label
                         for="nama_lengkap"
@@ -30,10 +41,10 @@
                         v-model="form.nama_lengkap"
                         type="text"
                         id="nama_lengkap"
-                        placeholder="Nama Lengkap Anda"
+                        placeholder="Nama Lengkap"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
-                            errors.nama_lengkap
+                            errors.nama_lengkap || hasValidationError('nama_lengkap')
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                         "
@@ -54,12 +65,17 @@
                     >
                     <input
                         v-model="form.nim"
+                        @input="
+                            form.nim = $event.target.value.replace(/\D/g, '')
+                        "
                         type="text"
                         id="nim"
-                        placeholder="NIM Anda"
+                        placeholder="Nomor Induk Mahasiswa"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
-                            errors.nim ? 'border-red-500' : 'border-gray-300'
+                            errors.nim || hasValidationError('nim')
+                                ? 'border-red-500' 
+                                : 'border-gray-300'
                         "
                     />
                     <p v-if="errors.nim" class="text-red-500 text-xs mt-1">
@@ -113,7 +129,7 @@
                         id="tanggal_lahir"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
-                            errors.tanggal_lahir
+                            errors.tanggal_lahir || hasValidationError('tanggal_lahir')
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                         "
@@ -136,10 +152,12 @@
                         v-model="form.alamat"
                         id="alamat"
                         rows="3"
-                        placeholder="Jl. Dipatiukur No. 112, Bandung"
+                        placeholder="cth: Jl. Dipatiukur No. 112, Bandung"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
-                            errors.alamat ? 'border-red-500' : 'border-gray-300'
+                            errors.alamat || hasValidationError('alamat') 
+                                ? 'border-red-500' 
+                                : 'border-gray-300'
                         "
                     ></textarea>
                     <p v-if="errors.alamat" class="text-red-500 text-xs mt-1">
@@ -155,12 +173,18 @@
                     >
                     <input
                         v-model="form.nomor_whatsapp"
+                        @input="
+                            form.nomor_whatsapp = $event.target.value.replace(
+                                /\D/g,
+                                ''
+                            )
+                        "
                         type="text"
                         id="nomor_whatsapp"
-                        placeholder="081234567890"
+                        placeholder="cth: 081234567890"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
-                            errors.nomor_whatsapp
+                            errors.nomor_whatsapp || hasValidationError('nomor_whatsapp')
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                         "
@@ -183,10 +207,12 @@
                         v-model="form.email"
                         type="email"
                         id="email"
-                        placeholder="email-unikom@mahasiswa.unikom.ac.id"
+                        placeholder="cth: email-aktif-kamu@gmail.com"
                         class="mt-1 block w-full rounded-lg border px-4 py-2 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         :class="
-                            errors.email ? 'border-red-500' : 'border-gray-300'
+                            errors.email || hasValidationError('email')
+                                ? 'border-red-500' 
+                                : 'border-gray-300'
                         "
                     />
                     <p v-if="errors.email" class="text-red-500 text-xs mt-1">
@@ -205,6 +231,7 @@
                             : ''
                     "
                     :multiple="false"
+                    :class="hasValidationError('bukti_registrasi') ? 'border-red-500' : ''"
                 />
 
                 <!-- CustomFileInput untuk bukti sosmed dengan multiple files -->
@@ -214,15 +241,17 @@
                     v-model="form.bukti_sosmed"
                     :error="errors.bukti_sosmed ? errors.bukti_sosmed[0] : ''"
                     :multiple="true"
+                    :class="hasValidationError('bukti_sosmed') ? 'border-red-500' : ''"
                 />
 
                 <div class="pt-4">
                     <button
-                        type="submit"
-                        :disabled="!isFormValid || isLoading"
+                        type="button"
+                        @click="validateAndShowModal"
+                        :disabled="isLoading"
                         class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-lg shadow-md transition disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
-                        {{ isLoading ? "Mengirim..." : "Registrasi" }}
+                        Registrasi
                     </button>
                 </div>
             </form>
@@ -236,6 +265,18 @@
         @close="showSuccessModal = false"
         to="/login-maba"
     />
+
+    <ConfirmationModal
+        :show="showConfirmationModal"
+        title="Konfirmasi Registrasi"
+        message="Data Anda sudah valid dan siap dikirim. Apakah Anda yakin ingin mengirim data registrasi?"
+        confirm-text="Ya, Kirim"
+        cancel-text="Batal"
+        loading-text="Sedang Mengirim..."
+        :is-loading="isLoading"
+        @confirm="handleSubmit"
+        @cancel="showConfirmationModal = false"
+    />
 </template>
 
 <script setup>
@@ -244,11 +285,15 @@ import { useAuthStore } from "@/Stores/authStore";
 import { storeToRefs } from "pinia";
 import SuccessModal from "../../Components/SuccessModal.vue";
 import CustomFileInput from "../../Components/CustomFileInput.vue";
+import ConfirmationModal from "../../Components/ConfirmationModal.vue";
 
 const authStore = useAuthStore();
 const { errors, isLoading, successMessage } = storeToRefs(authStore);
 
 const showSuccessModal = ref(false);
+const showConfirmationModal = ref(false);
+const validationErrors = ref([]);
+const validatedFields = ref([]);
 
 const form = ref({
     nama_lengkap: "",
@@ -262,10 +307,10 @@ const form = ref({
     bukti_sosmed: [],
 });
 
-// 2. Definisikan urutan field di form Anda
+// Definisikan urutan field di form
 const fieldOrder = [
     "nama_lengkap",
-    "nim",
+    "nim", 
     "jenis_kelamin",
     "tanggal_lahir",
     "alamat",
@@ -275,23 +320,146 @@ const fieldOrder = [
     "bukti_sosmed",
 ];
 
-// Computed property untuk validasi form
-const isFormValid = computed(() => {
-    // const emailPattern = /^[a-zA-Z0-9._%+-]+@mahasiswa\.unikom\.ac\.id$/;
+// Helper function untuk cek apakah field memiliki validation error
+const hasValidationError = (fieldName) => {
+    return validatedFields.value.includes(fieldName);
+};
 
-    return (
-        form.value.nama_lengkap.trim() !== "" &&
-        form.value.nim.trim() !== "" &&
-        form.value.tanggal_lahir !== "" &&
-        form.value.alamat.trim() !== "" &&
-        form.value.nomor_whatsapp.trim() !== "" &&
-        form.value.email.trim() !== "" &&
-        // emailPattern.test(form.value.email.trim()) && 
-        form.value.bukti_registrasi !== null &&
-        form.value.bukti_sosmed.length >= 3
-    );
-});
+// Function untuk validasi file size (2MB = 2097152 bytes)
+const validateFileSize = (file) => {
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    return file.size <= maxSize;
+};
 
+// Function untuk validasi email format
+const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+// Function untuk validasi WhatsApp (minimal 10 digit)
+const validateWhatsApp = (number) => {
+    return number.length >= 10 && number.length <= 15;
+};
+
+// Function untuk comprehensive validation
+const validateForm = () => {
+    const errors = [];
+    const errorFields = [];
+
+    // Reset validatedFields
+    validatedFields.value = [];
+
+    // Validasi nama lengkap
+    if (!form.value.nama_lengkap.trim()) {
+        errors.push("Nama lengkap harus diisi");
+        errorFields.push("nama_lengkap");
+    }
+
+    // Validasi NIM
+    if (!form.value.nim.trim()) {
+        errors.push("NIM harus diisi");
+        errorFields.push("nim");
+    } else if (form.value.nim.length < 8) {
+        errors.push("NIM minimal 8 digit");
+        errorFields.push("nim");
+    }
+
+    // Validasi tanggal lahir
+    if (!form.value.tanggal_lahir) {
+        errors.push("Tanggal lahir harus diisi");
+        errorFields.push("tanggal_lahir");
+    }
+
+    // Validasi alamat
+    if (!form.value.alamat.trim()) {
+        errors.push("Alamat harus diisi");
+        errorFields.push("alamat");
+    }
+
+    // Validasi nomor WhatsApp
+    if (!form.value.nomor_whatsapp.trim()) {
+        errors.push("Nomor WhatsApp harus diisi");
+        errorFields.push("nomor_whatsapp");
+    } else if (!validateWhatsApp(form.value.nomor_whatsapp)) {
+        errors.push("Nomor WhatsApp tidak valid (10-15 digit)");
+        errorFields.push("nomor_whatsapp");
+    }
+
+    // Validasi email
+    if (!form.value.email.trim()) {
+        errors.push("Email harus diisi");
+        errorFields.push("email");
+    } else if (!validateEmail(form.value.email)) {
+        errors.push("Format email tidak valid");
+        errorFields.push("email");
+    }
+
+    // Validasi bukti registrasi
+    if (!form.value.bukti_registrasi) {
+        errors.push("Bukti registrasi harus diupload");
+        errorFields.push("bukti_registrasi");
+    } else if (!validateFileSize(form.value.bukti_registrasi)) {
+        errors.push("Ukuran file bukti registrasi maksimal 2MB");
+        errorFields.push("bukti_registrasi");
+    }
+
+    // Validasi bukti sosmed
+    if (form.value.bukti_sosmed.length < 3) {
+        errors.push("Minimal 3 file bukti follow sosial media");
+        errorFields.push("bukti_sosmed");
+    } else {
+        // Check individual file sizes
+        let hasOversizeFile = false;
+        for (const file of form.value.bukti_sosmed) {
+            if (!validateFileSize(file)) {
+                hasOversizeFile = true;
+                break;
+            }
+        }
+        if (hasOversizeFile) {
+            errors.push("Setiap file bukti sosmed maksimal 2MB");
+            errorFields.push("bukti_sosmed");
+        }
+    }
+
+    validationErrors.value = errors;
+    validatedFields.value = errorFields;
+    
+    return errors.length === 0;
+};
+
+// Function yang dipanggil saat klik tombol Registrasi
+const validateAndShowModal = async () => {
+    // Clear previous errors
+    authStore.clearErrors();
+    
+    // Validate form
+    const isValid = validateForm();
+    
+    if (!isValid) {
+        // Scroll ke error pertama
+        await nextTick();
+        const firstErrorField = fieldOrder.find((field) => validatedFields.value.includes(field));
+        
+        if (firstErrorField) {
+            const errorElement = document.querySelector(`#${firstErrorField}`);
+            if (errorElement) {
+                errorElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+                errorElement.focus();
+            }
+        }
+        return;
+    }
+
+    // Jika semua valid, tampilkan modal konfirmasi
+    showConfirmationModal.value = true;
+};
+
+// Function untuk handle submit (hanya kirim data yang sudah valid)
 const handleSubmit = async () => {
     const formData = new FormData();
 
@@ -308,6 +476,7 @@ const handleSubmit = async () => {
     const isSuccess = await authStore.register(formData);
 
     if (isSuccess) {
+        showConfirmationModal.value = false;
         showSuccessModal.value = true;
 
         // Reset form
@@ -322,21 +491,22 @@ const handleSubmit = async () => {
             bukti_registrasi: null,
             bukti_sosmed: [],
         };
-    } else {
-        // 3. Tambahkan blok 'else' untuk menangani kegagalan
 
-        // Tunggu DOM selesai diperbarui dengan pesan error
+        // Reset validation
+        validationErrors.value = [];
+        validatedFields.value = [];
+    } else {
+        // Tutup modal konfirmasi jika ada error dari server
+        showConfirmationModal.value = false;
+
+        // Tunggu DOM selesai diperbarui dengan pesan error dari server
         await nextTick();
 
-        // Cari field pertama yang memiliki error berdasarkan urutan
+        // Scroll ke error pertama dari server
         const firstErrorField = fieldOrder.find((field) => errors.value[field]);
-
         if (firstErrorField) {
-            // Dapatkan elemen HTML dari field yang error
             const errorElement = document.querySelector(`#${firstErrorField}`);
-
             if (errorElement) {
-                // Scroll ke elemen tersebut dengan halus
                 errorElement.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
