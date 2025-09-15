@@ -12,11 +12,12 @@ class AccpetDatamabaPolicy
      */
     public function __construct()
     {
-        
+        //
     }
+
     public function viewAny(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
 
     /**
@@ -24,6 +25,21 @@ class AccpetDatamabaPolicy
      */
     public function view(User $user, AccpetDatamaba $dataMahasiswa): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
+    }
+
+    public function create(User $user): bool
+    {
+        return $user->role === 'admin';
+    }
+
+    public function update(User $user, AccpetDatamaba $dataMahasiswa): bool
+    {
+        return $user->role === 'admin';
+    }
+
+    public function delete(User $user, AccpetDatamaba $dataMahasiswa): bool
+    {
+        return $user->role === 'admin';
     }
 }
