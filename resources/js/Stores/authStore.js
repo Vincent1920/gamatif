@@ -212,9 +212,11 @@ export const useAuthStore = defineStore("auth", () => {
         try {
             const response = await api.get("/kelompok/status");
             kelompok.value = response.data.payload;
+            if (user.value) user.value.kelompok = response.data.payload;
         } catch (error) {
             if (error.response && error.response.status === 404) {
                 kelompok.value = null; // Pengguna belum punya kelompok
+                if (user.value) user.value.kelompok = null;
             } else {
                 console.error("Gagal mengambil status kelompok:", error);
             }
@@ -229,6 +231,7 @@ export const useAuthStore = defineStore("auth", () => {
         try {
             const response = await api.post("/kelompok/generate");
             kelompok.value = response.data.payload; // Update state dengan kelompok baru
+            if (user.value) user.value.kelompok = response.data.payload;
             return true;
         } catch (error) {
             console.error("Gagal generate kelompok:", error);

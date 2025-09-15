@@ -277,7 +277,7 @@ const fieldOrder = [
 
 // Computed property untuk validasi form
 const isFormValid = computed(() => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@mahasiswa\.unikom\.ac\.id$/;
+    // const emailPattern = /^[a-zA-Z0-9._%+-]+@mahasiswa\.unikom\.ac\.id$/;
 
     return (
         form.value.nama_lengkap.trim() !== "" &&
@@ -286,7 +286,7 @@ const isFormValid = computed(() => {
         form.value.alamat.trim() !== "" &&
         form.value.nomor_whatsapp.trim() !== "" &&
         form.value.email.trim() !== "" &&
-        emailPattern.test(form.value.email.trim()) && // ✅ Validasi domain email
+        // emailPattern.test(form.value.email.trim()) && 
         form.value.bukti_registrasi !== null &&
         form.value.bukti_sosmed.length >= 3
     );
