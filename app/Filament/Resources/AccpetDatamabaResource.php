@@ -49,9 +49,6 @@ class AccpetDatamabaResource extends Resource
                 ->searchable()
                 ->sortable(),
 
-       
-
-    
             TextColumn::make('nomor_whatsapp')
                 ->label('No. WhatsApp'),
 
