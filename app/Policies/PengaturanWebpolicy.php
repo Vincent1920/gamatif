@@ -3,22 +3,54 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\PengaturanWeb;
 
-class PengaturanWebpolicy
+class PengaturanWebPolicy
 {
     /**
-     * Create a new policy instance.
+     * Tentukan apakah user bisa melihat semua data.
      */
-    public function __construct()
+    public function viewAny(User $user): bool
     {
-        //
+        return $this->isAdmin($user);
     }
-        public function viewAny(User $user): bool
+
+    /**
+     * Tentukan apakah user bisa melihat detail data.
+     */
+    public function view(User $user, PengaturanWeb $pengaturanWeb): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $this->isAdmin($user);
     }
-    
-       public function view(User $user): bool
+
+    /**
+     * Tentukan apakah user bisa membuat data baru.
+     */
+    public function create(User $user): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    /**
+     * Tentukan apakah user bisa update data.
+     */
+    public function update(User $user, PengaturanWeb $pengaturanWeb): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    /**
+     * Tentukan apakah user bisa delete data.
+     */
+    public function delete(User $user, PengaturanWeb $pengaturanWeb): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    /**
+     * Helper: cek apakah user adalah admin.
+     */
+    private function isAdmin(User $user): bool
     {
         return $user->email === 'admin@gmail.com';
     }
