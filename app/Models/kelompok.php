@@ -43,4 +43,9 @@ class Kelompok extends Model
     {
         return $this->hasMany(IzinKehadiran::class);
     }
+    
+    public function dataMaba()
+    {
+        return $this->hasMany(InfoDataMaba::class, 'kelompok_id');
+    }
 }
