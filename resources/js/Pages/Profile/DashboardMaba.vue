@@ -52,9 +52,58 @@
                 </div>
             </div>
 
+            <div
+                class="md:col-span-1 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 flex flex-col items-center transition gap-2"
+            >
+                <button
+                    :disabled="!user.kelompok"
+                    class="text-white px-4 py-2 rounded-lg text-sm w-full"
+                    :class="
+                        user.kelompok
+                            ? 'bg-green-500 hover:bg-green-600'
+                            : 'bg-gray-300 cursor-not-allowed'
+                    "
+                    @click="goToGrup"
+                >
+                    Gabung Grup
+                </button>
+                <button
+                    class="text-white px-4 py-2 rounded-lg text-sm w-full"
+                    @click="openBukuSaku"
+                    :disabled="!isBukuSakuAvailable"
+                    :class="
+                        isBukuSakuAvailable
+                            ? 'bg-blue-500 hover:bg-blue-600'
+                            : 'bg-gray-300 cursor-not-allowed'
+                    "
+                >
+                    Buku Saku
+                </button>
+
+                <button
+                    disabled
+                    class="text-white px-4 py-2 rounded-lg text-sm w-full bg-gray-300 cursor-not-allowed"
+                    @click=""
+                >
+                    Absen
+                </button>
+                <!-- <button
+                    :disabled="!user.kelompok"
+                    disabled
+                    class="text-white px-4 py-2 rounded-lg text-sm w-full"
+                    :class="
+                        user.kelompok
+                            ? 'bg-yellow-500 hover:bg-yellow-600'
+                            : 'bg-gray-300'
+                    "
+                    @click=""
+                >
+                    Absen
+                </button> -->
+            </div>
             <!-- Jadwal -->
             <div
-                class="md:col-span-4 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition"
+                class="md:col-span-3 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition"
             >
                 <h2 class="text-lg font-semibold mb-4 text-gray-800">
                     📅 Jadwal Kegiatan
@@ -131,12 +180,35 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from "vue"; // 1. Impor 'watch'
+import { onMounted, watch, computed } from "vue"; // 1. Impor 'watch'
 import { useRouter, useRoute } from "vue-router"; // 2. Impor 'useRoute'
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/Stores/authStore";
 import { useJadwalKegiatanStore } from "@/Stores/jadwalKegiatanStore";
 import { useSosialMediaStore } from "@/Stores/sosialMediaStore";
+import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
+
+const pengaturanWebStore = usePengaturanWebStore();
+const { pengaturanWeb } = storeToRefs(pengaturanWebStore);
+
+onMounted(() => {
+    pengaturanWebStore.fetchPengaturanWeb();
+});
+
+const bukuSakuUrl = computed(() => {
+    const path = pengaturanWeb.value[0]?.buku_saku; // contoh: /logo_unikom/logo_unikom_baru.png
+    return path ? window.location.origin + "/storage/" + path : null;
+});
+
+const openBukuSaku = () => {
+    if (bukuSakuUrl.value) {
+        window.open(bukuSakuUrl.value, "_blank");
+    }
+};
+
+const isBukuSakuAvailable = computed(() => {
+    return !!pengaturanWeb.value[0]?.buku_saku; // true jika ada URL, false jika null/undefined
+});
 
 const router = useRouter();
 const route = useRoute(); // 3. Dapatkan objek rute saat ini
@@ -194,6 +266,15 @@ onMounted(async () => {
 
 const goToProfile = () => {
     router.push("/profile-maba");
+};
+
+const goToGrup = () => {
+    const url = user.value?.kelompok?.url_grub;
+    if (url) {
+        window.open(url, "_blank");
+    } else {
+        console.warn("URL grup belum tersedia.");
+    }
 };
 
 const goToAmbilKelompok = () => {
