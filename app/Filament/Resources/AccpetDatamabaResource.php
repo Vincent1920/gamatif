@@ -58,6 +58,7 @@ class AccpetDatamabaResource extends Resource
                 ->label('Nama Lengkap')
                 ->searchable()
                 ->sortable(),
+
             TextColumn::make('nomor_whatsapp')
                 ->label('No. WhatsApp'),
 

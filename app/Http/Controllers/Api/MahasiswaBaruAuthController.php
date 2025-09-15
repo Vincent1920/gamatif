@@ -120,7 +120,8 @@ class MahasiswaBaruAuthController extends Controller
                 'password' => 'required|string',
             ]);
 
-            $mahasiswa = MahasiswaBaru::where('email', $request->email)->first();
+            $mahasiswa = MahasiswaBaru::with('kelompok')->where('email', $request->email)->first();
+
 
             if (!$mahasiswa || !Hash::check($request->password, $mahasiswa->password)) {
                 return response()->json([
@@ -178,6 +179,28 @@ class MahasiswaBaruAuthController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan saat logout.',
+                'kode' => 500,
+                'payload' => [
+                    'error' => $e->getMessage(),
+                ]
+            ], 500);
+        }
+    }
+
+    public function me(Request $request)
+    {
+        try {
+            return response()->json([
+                'message' => 'User data retrieved.',
+                'kode' => 200,
+                'payload' => [
+                    'user' => $request->user()->load('kelompok'),
+
+                ],
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat mengambil data user.',
                 'kode' => 500,
                 'payload' => [
                     'error' => $e->getMessage(),

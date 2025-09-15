@@ -29,7 +29,7 @@ class BarangSitaanPolicy
      */
     public function create(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+       return $user->role === 'admin';
     }
 
     /**
@@ -37,7 +37,7 @@ class BarangSitaanPolicy
      */
     public function update(User $user, BarangSitaan $barangSitaan): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
 
     /**
@@ -45,7 +45,7 @@ class BarangSitaanPolicy
      */
     public function delete(User $user, BarangSitaan $barangSitaan): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
 
     /**

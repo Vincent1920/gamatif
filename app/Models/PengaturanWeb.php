@@ -12,8 +12,14 @@ class PengaturanWeb extends Model
     protected $table = "pengaturan_web";
 
     protected $fillable = [
+        'logo_unikom',
         'logo_hmif',
+        'logo_kabinet',
         'logo_gamatif',
+        'logo_maskot',
+        'admin_wa_1',
+        'admin_wa_2',
+        'email',
         'nama_kegiatan',
 
     ];

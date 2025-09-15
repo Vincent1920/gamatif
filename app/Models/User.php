@@ -3,13 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Panel;
 use App\Models\kelompok;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
+use Filament\Models\Contracts\FilamentUser;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -45,8 +48,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        Log::info('canAccessPanel dipanggil untuk user id: ' . $this->id);
+        return true; // Ganti logika ini sesuai kebutuhan akses kamu
+    }
+
+    // Kalau kamu mau, method ini bisa kamu hapus atau biarkan, tapi Filament default pakai canAccessPanel()
+    public function canAccessFilament(): bool
+    {
+        Log::info('canAccessFilament dipanggil untuk user id: ' . $this->id);
+        return true;
+    }
     public function kelompok()
-{
-    return $this->hasOne(kelompok::class, 'user_id', 'id');
-}
+    {
+        return $this->hasOne(kelompok::class, 'user_id', 'id');
+    }
 }
