@@ -1,15 +1,15 @@
 <template>
     <div
         id="kontak"
-        class="relative pt-16 sm:pt-24 mt-30 bg-gray-200 dark:bg-gray-900 rounded-t-full"
+        class="relative pt-16 sm:pt-24 mt-30 bg-gray-900 rounded-t-full"
     >
         <div class="max-w-2xl mx-auto px-4 pt-20 text-center z-10 relative">
             <h2
-                class="text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900 dark:text-white"
+                class="text-3xl font-extrabold tracking-tight sm:text-4xl text-white"
             >
                 Tinggalkan Pesan & Kesan
             </h2>
-            <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">
+            <p class="mt-4 text-lg text-gray-400">
                 Bagikan harapan atau kesan pertamamu sebagai bagian dari
                 keluarga besar Teknik Informatika!
             </p>
@@ -17,17 +17,17 @@
             <form @submit.prevent="handleSubmit" class="mt-8 space-y-6">
                 <div class="flex items-center gap-4">
                     <div class="flex-grow">
-                        <label for="name" class="sr-only">Nama</label>
+                        <label for="nama" class="sr-only">Nama</label>
                         <input
-                            v-model="form.name"
+                            v-model="form.nama"
                             :disabled="isAnonymous"
                             type="text"
-                            name="name"
-                            id="name"
+                            name="nama"
+                            id="nama"
                             required
-                            class="block w-full px-4 py-3 rounded-md bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+                            class="block w-full px-4 py-3 rounded-md bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
                             :class="{
-                                'bg-gray-200 dark:bg-gray-800 cursor-not-allowed':
+                                'bg-gray-800 cursor-not-allowed':
                                     isAnonymous,
                             }"
                             placeholder="Nama Lengkap"
@@ -38,22 +38,22 @@
                             id="checked-checkbox"
                             type="checkbox"
                             v-model="isAnonymous"
-                            class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            class="w-4 h-4 text-yellow-600  rounded focus:ring-yellow-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
                         />
                         <label
                             for="checked-checkbox"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            class="ms-2 text-sm font-medium text-gray-300"
                             >Anonim</label
                         >
                     </div>
                 </div>
 
                 <div>
-                    <label for="message" class="sr-only">Pesan & Kesan</label>
+                    <label for="pesan" class="sr-only">Pesan & Kesan</label>
                     <textarea
-                        v-model="form.message"
-                        name="message"
-                        id="message"
+                        v-model="form.pesan"
+                        name="pesan"
+                        id="pesan"
                         rows="4"
                         required
                         class="block w-full px-4 py-3 rounded-md bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -64,9 +64,10 @@
                 <div>
                     <button
                         type="submit"
-                        class="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-900 transition"
+                        :disabled="kritikSaranStore.isLoading"
+                        class="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-900 transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Kirim Pesan
+                        {{ kritikSaranStore.isLoading ? 'Mengirim...' : 'Kirim Pesan' }}
                     </button>
                 </div>
             </form>
@@ -103,7 +104,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
+                    <!-- <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
                         <div>
                             <h2
                                 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
@@ -154,7 +155,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <hr
                     class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
@@ -167,7 +168,7 @@
                             >HMIF | Dakshawira</a
                         >. All Rights Reserved.
                     </span>
-                    <div class="flex mt-4 sm:justify-center sm:mt-0">
+                    <!-- <div class="flex mt-4 sm:justify-center sm:mt-0">
                         <a
                             href="#"
                             class="text-gray-500 hover:text-gray-900 dark:hover:text-white"
@@ -261,7 +262,7 @@
                             </svg>
                             <span class="sr-only">Dribbble account</span>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </footer>
@@ -271,28 +272,37 @@
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
 import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
+import { useKritikSaranStore } from "@/Stores/kritikSaranStore";
 import { storeToRefs } from "pinia";
 
 // Store form pesan
-const form = ref({ name: "", message: "" });
+const form = ref({ nama: "", pesan: "" });
 const isAnonymous = ref(true);
+
+// Store kritik saran
+const kritikSaranStore = useKritikSaranStore();
 
 // Watcher untuk toggle anonim
 watch(
     isAnonymous,
     (newValue) => {
-        form.value.name = newValue ? "Anonim" : "";
+        form.value.nama = newValue ? "Anonim" : "";
     },
     { immediate: true }
 );
 
 // Kirim pesan
-const handleSubmit = () => {
-    const displayName =
-        form.value.name === "Anonim" ? "Pengirim Anonim" : form.value.name;
-    alert(`Terima kasih, ${displayName}! Pesanmu sudah kami terima.`);
-    form.value.message = "";
-    if (!isAnonymous.value) form.value.name = "";
+const handleSubmit = async () => {
+    const result = await kritikSaranStore.submitKritikSaran(form.value);
+    if (result.success) {
+        const displayName =
+            form.value.nama === "Anonim" ? "Pengirim Anonim" : form.value.nama;
+        alert(`Terima kasih, ${displayName}! Pesanmu sudah kami terima.`);
+        form.value.pesan = "";
+        if (!isAnonymous.value) form.value.nama = "";
+    } else {
+        alert(result.error);
+    }
 };
 
 // ==============================
