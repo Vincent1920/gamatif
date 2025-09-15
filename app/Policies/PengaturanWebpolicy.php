@@ -8,6 +8,7 @@ use App\Models\PengaturanWeb;
 class PengaturanWebPolicy
 {
     /**
+
      * Tentukan apakah user bisa melihat semua data.
      */
     public function viewAny(User $user): bool
@@ -52,6 +53,6 @@ class PengaturanWebPolicy
      */
     private function isAdmin(User $user): bool
     {
-        return $user->email === 'admin@gmail.com';
+        return $user->role === 'admin';
     }
 }

@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Kelompok;
 use App\Models\DataMahasiswa;
 use Database\Seeders\MahasiswaBaruSeeder;
+use Database\Seeders\JadwalKegiatanSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,27 +12,30 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Panggil seeder lain
         $this->call([
             MahasiswaBaruSeeder::class,
+            JadwalKegiatanSeeder::class,
         ]);
-        // Daftar nama kelompok
-        $kelompokNames = [
-            'Gipsy Danger',
-            'Striker Eureka',
-            'Crimson Typhoon',
-            'Cherno Alpha',
-            'Bracer Phoenix',
-            'Saber Athena',
-            'Titan Redeemer',
-            'Guardian Bravo',
-            'Obsidian Fury',
-            'Horizon Brave'
+
+        // Daftar nama kelompok + url grup
+        $kelompokData = [
+            ['nama_kelompok' => 'Gipsy Danger', 'url_grub' => 'https://chat.whatsapp.com/BZsFiidskgqL22jrzFDdol'],
+            ['nama_kelompok' => 'Striker Eureka', 'url_grub' => 'https://chat.whatsapp.com/BBVfieNwyW3Al1Vjfe5tPg'],
+            ['nama_kelompok' => 'Crimson Typhoon', 'url_grub' => 'https://chat.whatsapp.com/BAQ2nT5accALPoqoLj7PUd'],
+            ['nama_kelompok' => 'Cherno Alpha', 'url_grub' => 'https://chat.whatsapp.com/HcbjRPHB46cEalHnySS6V2'],
+            ['nama_kelompok' => 'Bracer Phoenix', 'url_grub' => 'https://chat.whatsapp.com/I915MvyzQD6H25Xb3f38LB'],
+            ['nama_kelompok' => 'Saber Athena', 'url_grub' => 'https://chat.whatsapp.com/F3V3tjONYn5LyBpBylGXS7'],
+            ['nama_kelompok' => 'Titan Redeemer', 'url_grub' => 'https://chat.whatsapp.com/DEhQLmCai ps7RCGhPYmZnv'],
+            ['nama_kelompok' => 'Guardian Bravo', 'url_grub' => 'https://chat.whatsapp.com/CeArAaJgKC9CQ3KAqlxFTu'],
+            ['nama_kelompok' => 'Obsidian Fury', 'url_grub' => 'https://chat.whatsapp.com/DPN3iHxA2RBDJ0t4IRFTBQ'],
+            ['nama_kelompok' => 'Horizon Brave', 'url_grub' => 'https://chat.whatsapp.com/LR2GP8JtLc09NZ2VDpRGhQ'],
         ];
 
-        // Buat data kelompok
+        // Simpan data kelompok ke DB dan buat mapping
         $kelompoks = [];
-        foreach ($kelompokNames as $name) {
-            $kelompoks[$name] = Kelompok::create(['nama_kelompok' => $name]);
+        foreach ($kelompokData as $data) {
+            $kelompoks[$data['nama_kelompok']] = Kelompok::create($data);
         }
 
         // Buat user Admin
@@ -44,19 +48,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Buat user untuk masing-masing kelompok
-     foreach ($kelompokNames as $index => $name) {
-        // ubah spasi jadi underscore, tapi biarkan huruf besar tetap
-        $emailName = str_replace(' ', '_', $name);
+        foreach ($kelompoks as $namaKelompok => $kelompok) {
+            $emailName = str_replace(' ', '_', $namaKelompok);
 
-        User::factory()->create([
-            'name' => 'Kelompok ' . ($index + 1) . ' - ' . str_replace('_', ' ', $name),
-            'role' => 'pk',
-            'email' => $emailName . '@gmail.com',
-            'password' => Hash::make($emailName), // password juga bisa pakai versi underscore
-            'kelompok_id' => $kelompoks[$name]->id,
-        ]);
-    }
-
+            User::factory()->create([
+                'name' => 'PK - ' . $namaKelompok,
+                'role' => 'pk',
+                'email' => strtolower($emailName) . '@gmail.com',
+                'password' => Hash::make(strtolower($emailName)),
+                'kelompok_id' => $kelompok->id,
+            ]);
+        }
 
         // Data mahasiswa
         $mahasiswaData = [

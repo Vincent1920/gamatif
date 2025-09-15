@@ -44,11 +44,26 @@
         </div>
 
         <div class="p-4 flex justify-center md:justify-end">
-            <img
-                src="../../../../public/images/maskot.png"
-                alt="welcome"
-                class="h-auto max-h-96"
-            />
+            <img :src="maskotUrl" alt="welcome" class="h-auto max-h-96" />
         </div>
     </div>
 </template>
+<script setup>
+import { onMounted, computed } from "vue";
+import { storeToRefs } from "pinia";
+import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
+
+const pengaturanWebStore = usePengaturanWebStore();
+const { pengaturanWeb } = storeToRefs(pengaturanWebStore);
+
+onMounted(() => {
+    pengaturanWebStore.fetchPengaturanWeb();
+});
+
+const maskotUrl = computed(() => {
+    if (pengaturanWeb.value[0]?.logo_maskot) {
+        return `${window.location.origin}/storage/${pengaturanWeb.value[0].logo_maskot}`;
+    }
+    return "/images/maskot.png"; // fallback lokal
+});
+</script>

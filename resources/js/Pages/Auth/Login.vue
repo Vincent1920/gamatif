@@ -11,19 +11,19 @@
                         class="flex items-center justify-center space-x-6 bg-white rounded-full px-8 py-4 mx-auto w-fit shadow-md"
                     >
                         <img
-                            src="../../../../public/images/logo-gamatif.png"
-                            class="h-8"
-                            alt="Logo 1"
+                            :src="logoUnikomUrl"
+                            class="h-15 me-3"
+                            alt="Logo UNIKOM"
                         />
                         <img
-                            src="../../../../public/images/logo-gamatif.png"
-                            class="h-8"
-                            alt="Logo 2"
+                            :src="logoHMIFtUrl"
+                            class="h-15 me-3"
+                            alt="Logo HMIF"
                         />
                         <img
-                            src="../../../../public/images/logo-gamatif.png"
-                            class="h-8"
-                            alt="Logo 3"
+                            :src="logoKabinetUrl"
+                            class="h-15 me-3"
+                            alt="Logo Kabinet"
                         />
                     </div>
 
@@ -48,10 +48,10 @@
             <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
                 <div class="flex justify-center">
                     <img
-                            src="../../../../public/images/logo-gamatif.png"
-                            class="h-13 mb-6"
-                            alt="Logo 3"
-                        />
+                        :src="logoGamatifUrl"
+                        class="h-15 me-3"
+                        alt="Logo UNIKOM"
+                    />
                 </div>
                 <!-- <h2 class="text-3xl font-bold text-center text-gray-800 my-6">
 
@@ -123,9 +123,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../Stores/authStore";
+import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
 import { storeToRefs } from "pinia";
 
 const router = useRouter();
@@ -160,4 +161,31 @@ const handleLogin = async () => {
         }
     }
 };
+const pengaturanWebStore = usePengaturanWebStore();
+const { pengaturanWeb } = storeToRefs(pengaturanWebStore);
+
+onMounted(() => {
+    pengaturanWebStore.fetchPengaturanWeb();
+});
+
+const baseURL = window.location.origin;
+const logoUnikomUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-unikom.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_unikom}`;
+});
+
+const logoHMIFtUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-hmif.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_hmif}`;
+});
+
+const logoKabinetUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-kabinet.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_kabinet}`;
+});
+
+const logoGamatifUrl = computed(() => {
+    if (!pengaturanWeb.value.length) return "/images/logo-gamatif.png";
+    return `${baseURL}/storage/${pengaturanWeb.value[0].logo_gamatif}`;
+});
 </script>
