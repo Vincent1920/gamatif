@@ -55,6 +55,13 @@ public static function table(Table $table): Table
                 ->sortable()
                 ->searchable(),
 
+                TextColumn::make('nomor_whatsapp')
+                ->label('Nomor WA')
+                ->url(fn ($record) => 'https://wa.me/' . preg_replace('/^0/', '62', $record->nomor_whatsapp)) // ubah 08 jadi 628
+                ->openUrlInNewTab()
+                ->color('info')
+                ->icon('heroicon-o-phone'),
+
         TextColumn::make('kelompok.nama_kelompok')
             ->label('Kelompok')
             ->sortable()
