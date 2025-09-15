@@ -8,12 +8,11 @@ use App\Models\PengaturanWeb;
 class PengaturanWebPolicy
 {
     /**
-
      * Tentukan apakah user bisa melihat semua data.
      */
     public function viewAny(User $user): bool
     {
-        return $this->isAdmin($user);
+        return $user->role === 'admin';
     }
 
     /**
@@ -21,7 +20,7 @@ class PengaturanWebPolicy
      */
     public function view(User $user, PengaturanWeb $pengaturanWeb): bool
     {
-        return $this->isAdmin($user);
+        return $user->role === 'admin';
     }
 
     /**
@@ -29,7 +28,7 @@ class PengaturanWebPolicy
      */
     public function create(User $user): bool
     {
-        return $this->isAdmin($user);
+        return $user->role === 'admin';
     }
 
     /**
@@ -37,7 +36,7 @@ class PengaturanWebPolicy
      */
     public function update(User $user, PengaturanWeb $pengaturanWeb): bool
     {
-        return $this->isAdmin($user);
+        return $user->role === 'admin';
     }
 
     /**
@@ -45,7 +44,7 @@ class PengaturanWebPolicy
      */
     public function delete(User $user, PengaturanWeb $pengaturanWeb): bool
     {
-        return $this->isAdmin($user);
+        return $user->role === 'admin';
     }
 
     /**
