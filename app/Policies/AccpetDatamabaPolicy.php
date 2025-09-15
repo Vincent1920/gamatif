@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\AccpetDatamaba;
 
-class AccpetDatamabaPlicy
+class AccpetDatamabaPolicy
 {
     /**
      * Create a new policy instance.
