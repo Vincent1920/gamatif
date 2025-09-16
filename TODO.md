@@ -1,9 +1,8 @@
-- [x] Add span "Maksimal 2 MB" below label in CustomFileInput.vue
-- [x] Add ref sizeError in script
-- [x] Modify handleFileChange to validate file size (2MB) and set sizeError if exceeds
-- [x] Update label class to include sizeError for red border
-- [x] Update fileText span class and text to show sizeError in red
-- [x] Test the validation by uploading files >2MB
-- [x] Add input validation for nim to only allow numbers
-- [x] Add input validation for nomor_whatsapp to only allow numbers
-- [x] Add confirmation modal before submitting registration
+# TODO: Improve Registration Error Handling
+
+## Tasks
+- [x] Modify MahasiswaBaruAuthController register method to log errors and return generic messages
+- [x] Test error handling with simulated server errors
+- [x] Verify logs are written properly
+- [x] Fix date validation to prevent invalid dates from reaching database
+- [x] Update status column from enum to boolean across all files

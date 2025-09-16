@@ -28,7 +28,7 @@ class MahasiswaBaruSeeder extends Seeder
                     "bukti_sosmed/wmkJkzTfjZtnLlfa3hGfcr3wmzbIXgMU592ON3ri.png",
                     "bukti_sosmed/ny7514J5wHtUcdlTN2YgKF6AcKZXBLUkcGJ4qc9M.png"
                 ],
-                'status' => 'tidak_aktif',
+                'status' => false,
                 'password' => Hash::make('password'),
             ]
         );
