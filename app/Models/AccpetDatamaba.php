@@ -9,9 +9,25 @@ class AccpetDatamaba extends Model
 {
     protected $table = "mahasiswa_baru";
     use HasFactory;
-  
-     protected $fillable = [
-        'status'
 
+    protected $fillable = [
+        'nama_lengkap',
+        'nim',
+        'jenis_kelamin',
+        'tanggal_lahir',
+        'alamat',
+        'nomor_whatsapp',
+        'email',
+        'bukti_sosmed',
+        'bukti_registrasi',
+        'kelompok_id',
+        'password',
+        'status'
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'bukti_sosmed' => 'array',
+        'tanggal_lahir' => 'date',
     ];
 }

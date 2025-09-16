@@ -69,6 +69,25 @@
                         <ul class="py-2 text-sm text-gray-700">
                             <li>
                                 <router-link
+                                    to="/"
+                                    @click="isDropdownOpen = false"
+                                    class="block px-4 py-2 hover:bg-gray-50 transition"
+                                    >Beranda</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link
+                                    to="/dashboard-maba"
+                                    @click="isDropdownOpen = false"
+                                    class="block px-4 py-2 hover:bg-gray-50 transition"
+                                    >Dashboard</router-link
+                                >
+                            </li>
+                            <li class="flex justify-center">
+                                <hr class="my-1 w-43 text-gray-300" />
+                            </li>
+                            <li>
+                                <router-link
                                     to="/profile-maba"
                                     @click="isDropdownOpen = false"
                                     class="block px-4 py-2 hover:bg-gray-50 transition"

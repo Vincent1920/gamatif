@@ -1,15 +1,9 @@
-# TODO: Implementasi Kritik Saran
-
-## Backend
-- [x] Buat migrasi untuk tabel kritik_saran
-- [x] Buat model KritikSaran
-- [x] Buat controller Api/KritikSaranController dengan method store
-- [x] Tambah route POST /kritik-saran di routes/api.php
-
-## Frontend
-- [x] Buat store kritikSaranStore.js
-- [x] Update ContactSection.vue untuk menggunakan store di handleSubmit
-
-## Testing
-- [x] Jalankan php artisan migrate
-- [x] Test pengiriman form dari ContactSection (siap untuk testing)
+- [x] Add span "Maksimal 2 MB" below label in CustomFileInput.vue
+- [x] Add ref sizeError in script
+- [x] Modify handleFileChange to validate file size (2MB) and set sizeError if exceeds
+- [x] Update label class to include sizeError for red border
+- [x] Update fileText span class and text to show sizeError in red
+- [x] Test the validation by uploading files >2MB
+- [x] Add input validation for nim to only allow numbers
+- [x] Add input validation for nomor_whatsapp to only allow numbers
+- [x] Add confirmation modal before submitting registration
