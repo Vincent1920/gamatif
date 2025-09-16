@@ -1,28 +1,39 @@
 <x-filament-widgets::widget>
-    <div class="fi-ta-widget">
-{{-- Bagian Bawah: Daftar Kelompok --}}
-        <div class="mt-6">
-    <h2 class="text-lg font-semibold text-gray-950 dark:text-white">Daftar Kelompok</h2>
-    <div class="fi-wi-stats-overview grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4">
-        @foreach ($kelompok as $item)
-            <div class="fi-wi-stats-overview-card relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-                <div class="grid gap-y-2">
-                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        {{ $item->nama_kelompok }}
+    {{-- full width keluar dari container Filament --}}
+    <div class="w-screen -mx-6 px-6">
+
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+            Daftar Kelompok
+        </h2>
+
+        {{-- Responsive: 2 cols (xs) / 4 cols (sm) / 8 cols (lg) --}}
+        <div class="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+            @foreach ($kelompok as $item)
+            <div
+                class="p-4 rounded-lg shadow-sm ring-1 ring-gray-200
+                           {{ $loop->index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }}">
+                <div class="text-sm font-medium text-gray-600 truncate">
+                    {{ $item->nama_kelompok }}
+                </div>
+
+                <div class="text-2xl font-bold text-gray-900 mt-2">
+                    {{ $item->total_maba }}
+                </div>
+
+                <div class="mt-3 flex items-center gap-2 text-xs">
+                    {{-- L (info / biru) --}}
+                    <span class="inline-flex items-center px-2 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold">
+                        L: {{ $item->jumlah_laki }}
                     </span>
-                    <span class="text-2xl font-semibold tracking-tight text-blue-950 dark:text-white">
-                        {{ $item->total_maba }}
+
+                    {{-- P (danger / merah) --}}
+                    <span class="inline-flex items-center px-2 py-1 rounded-full bg-red-50 text-red-700 font-semibold">
+                        P: {{ $item->jumlah_perempuan }}
                     </span>
-                    <div class="flex items-center gap-x-4 text-xs">
-                        <span class="text-blue-600 font-semibold">L: {{ $item->jumlah_laki }}</span>
-                        <span class="text-pink-600 font-semibold">P: {{ $item->jumlah_perempuan }}</span>
-                    </div>
                 </div>
             </div>
-        @endforeach
-    </div>
-</div>
+            @endforeach
+        </div>
 
-        
     </div>
 </x-filament-widgets::widget>

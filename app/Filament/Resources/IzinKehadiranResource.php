@@ -35,7 +35,7 @@ class IzinKehadiranResource extends Resource
 {
     protected static ?string $model = IzinKehadiran::class;
     
-    protected static ?string $navigationIcon = 'heroicon-o-envelope';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Absensi Mahasiswa';
 protected static ?int $navigationSort = 3;
 

@@ -25,7 +25,7 @@ class InfoDataMabaResource extends Resource
 {
     protected static ?string $model = InfoDataMaba::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-information-circle';
     protected static ?string $navigationGroup = 'Absensi Mahasiswa';
     protected static ?int $navigationSort = 3;
     // Label dinamis per kelompok (opsional, bisa pakai Blade)

@@ -17,7 +17,7 @@ class KritikSaranResource extends Resource
 {
     protected static ?string $model = KritikSaran::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
     protected static ?string $navigationGroup = 'Pengaturan';
     protected static ?string $pluralModelLabel = 'Kritik Saran';
     protected static ?int $navigationSort = 2;
