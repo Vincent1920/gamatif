@@ -26,7 +26,7 @@ class DataMahasiswaResource extends Resource
 {
     protected static ?string $model = DataMahasiswa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'Data Master';
     protected static ?string $pluralModelLabel = 'Data Mahasiswa';

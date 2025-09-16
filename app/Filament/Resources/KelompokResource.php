@@ -21,7 +21,7 @@ class KelompokResource extends Resource
 
      protected static ?string $navigationLabel = 'Kelompok';
     protected static ?string $pluralLabel = 'Kelompok';
-      protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+      protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationGroup = 'Data Master';
   protected static ?int $navigationSort = 1;
 

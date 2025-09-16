@@ -20,7 +20,7 @@ class JadwalKegiatanResource extends Resource
 {
     protected static ?string $model = JadwalKegiatan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
     protected static ?string $pluralModelLabel = 'jadwal kegiatan';
     protected static ?string $navigationGroup = 'Data Master';
     protected static ?int $navigationSort = 1;

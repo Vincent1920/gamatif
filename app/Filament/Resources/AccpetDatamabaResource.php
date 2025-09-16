@@ -27,7 +27,7 @@ class AccpetDatamabaResource extends Resource
 {
     protected static ?string $model = AccpetDatamaba::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
     protected static ?string $navigationGroup = 'Data Master';
     protected static ?string $pluralModelLabel = 'Accpe Datamahasiswa';
     protected static ?int $navigationSort = 1;

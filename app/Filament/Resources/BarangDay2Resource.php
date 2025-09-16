@@ -22,7 +22,7 @@ class BarangDay2Resource extends Resource
 
 protected static ?int $navigationSort = 3;
     
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     protected static ?string $pluralModelLabel = 'Barang Bawaan Day 2';
 

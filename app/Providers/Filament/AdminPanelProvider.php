@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\DashboardOverview::class,
                 \App\Filament\Widgets\KelompokCard::class,
 
-                Widgets\AccountWidget::class,
+                // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
             ->sidebarCollapsibleOnDesktop()

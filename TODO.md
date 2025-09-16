@@ -1,8 +1,16 @@
-# TODO: Improve Registration Error Handling
+# TODO: Update Filament Menu Icons
 
-## Tasks
-- [x] Modify MahasiswaBaruAuthController register method to log errors and return generic messages
-- [x] Test error handling with simulated server errors
-- [x] Verify logs are written properly
-- [x] Fix date validation to prevent invalid dates from reaching database
-- [x] Update status column from enum to boolean across all files
+- [x] AbsensiResource.php: Change 'heroicon-o-user-group' to 'heroicon-o-clipboard-document-list' (for attendance)
+- [x] AccpetDatamabaResource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-check-circle' (for accept data mahasiswa)
+- [x] BarangDay1Resource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-archive-box' (for barang bawaan day 1)
+- [x] BarangDay2Resource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-archive-box' (for barang bawaan day 2)
+- [x] BarangDay3Resource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-archive-box' (for barang bawaan day 3)
+- [x] BarangSitaanResource.php: Keep 'heroicon-o-exclamation-triangle' (already appropriate for confiscated items)
+- [x] DataMahasiswaResource.php: Change 'heroicon-o-user-group' to 'heroicon-o-users' (for data mahasiswa)
+- [x] InfoDataMabaResource.php: Change 'heroicon-o-user-group' to 'heroicon-o-information-circle' (for info data maba)
+- [x] IzinKehadiranResource.php: Change 'heroicon-o-envelope' to 'heroicon-o-document-text' (for izin kehadiran)
+- [x] JadwalKegiatanResource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-calendar-days' (for jadwal kegiatan)
+- [x] KelompokResource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-user-group' (for kelompok)
+- [x] KritikSaranResource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-chat-bubble-left-right' (for kritik saran)
+- [x] PengaturanWebResource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-cog-6-tooth' (for pengaturan web)
+- [x] SosialMediaResource.php: Change 'heroicon-o-rectangle-stack' to 'heroicon-o-share' (for sosial media)
