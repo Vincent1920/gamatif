@@ -34,6 +34,7 @@ class MahasiswaBaru extends Authenticatable
 
     protected $casts = [
         'bukti_sosmed' => 'array',
+        'status' => 'boolean',
     ];
 
     /**

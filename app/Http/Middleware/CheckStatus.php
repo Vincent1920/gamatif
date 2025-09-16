@@ -15,7 +15,7 @@ class CheckStatus
     {
         $user = auth()->user(); // ambil user yang login (guard default)
 
-        if ($user && $user->status === 'tidak_aktif') {
+        if ($user && !$user->status) {
             // Jika akun belum aktif, redirect ke halaman khusus
             return redirect()->route('akun.belum-aktif');
         }

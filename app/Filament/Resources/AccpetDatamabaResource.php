@@ -56,8 +56,8 @@ class AccpetDatamabaResource extends Resource
         return $table
             ->modifyQueryUsing(function ($query) {
                 return $query->orderByRaw("
-                CASE 
-                    WHEN status = 'tidak_aktif' THEN 0
+                CASE
+                    WHEN status = 0 THEN 0
                     WHEN status IS NULL THEN 1
                     ELSE 2
                 END
