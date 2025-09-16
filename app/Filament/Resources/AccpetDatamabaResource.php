@@ -18,6 +18,8 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AccpetDatamabaResource\Pages;
 use App\Filament\Resources\AccpetDatamabaResource\RelationManagers;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MahasiswaBaruActivated;
 
 class AccpetDatamabaResource extends Resource
 {
@@ -35,59 +37,59 @@ class AccpetDatamabaResource extends Resource
             ]);
     }
 
-   public static function table(Table $table): Table
-{
-    return $table
-      ->modifyQueryUsing(function ($query) {
-            return $query->orderByRaw("
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->modifyQueryUsing(function ($query) {
+                return $query->orderByRaw("
                 CASE 
                     WHEN status = 'tidak_aktif' THEN 0
                     WHEN status IS NULL THEN 1
                     ELSE 2
                 END
             ")->orderBy('nama_lengkap', 'asc'); // opsional, biar tetap rapi
-        })
-        
-        ->columns([
-            TextColumn::make('nim')
-                ->label('NIM')
-                ->searchable()
-                ->sortable(),
+            })
 
-            TextColumn::make('nama_lengkap')
-                ->label('Nama Lengkap')
-                ->searchable()
-                ->sortable(),
+            ->columns([
+                TextColumn::make('nim')
+                    ->label('NIM')
+                    ->searchable()
+                    ->sortable(),
 
-            TextColumn::make('nomor_whatsapp')
-                ->label('No. WhatsApp'),
+                TextColumn::make('nama_lengkap')
+                    ->label('Nama Lengkap')
+                    ->searchable()
+                    ->sortable(),
 
-            TextColumn::make('email')
-                ->label('Email')
-                ->searchable(),         
-            // tampilkan file bukti registrasi
-               ImageColumn::make('bukit_registrasi')
-                ->label('Bukti Registrasi')
-                ->disk('public')
-                ->width(120)
-                ->height(70)
-                ->square()
-                ->url(fn ($record) => Storage::disk('public')->url($record->foto))
-                ->extraImgAttributes(['loading' => 'lazy']),
+                TextColumn::make('nomor_whatsapp')
+                    ->label('No. WhatsApp'),
 
-            // Checkbox status aktif / tidak_aktif
-         CheckboxColumn::make('status')
-                ->label('Status')
-                ->getStateUsing(fn ($record) => $record->status === 'aktif') // kalau 'aktif' = true
-                ->afterStateUpdated(function ($state, $record) {
-                    $record->update([
-                        'status' => $state ? 'aktif' : 'tidak_aktif',
-                    ]);
-                })
+                TextColumn::make('email')
+                    ->label('Email')
+                    ->searchable(),
+                // tampilkan file bukti registrasi
+                ImageColumn::make('bukti_registrasi')
+                    ->label('Bukti Registrasi')
+                    ->disk('public')
+                    ->width(120)
+                    ->height(70)
+                    ->square()
+                    ->url(fn($record) => Storage::disk('public')->url($record->foto))
+                    ->extraImgAttributes(['loading' => 'lazy']),
+
+                // Checkbox status aktif / tidak_aktif
+                CheckboxColumn::make('status')
+                    ->label('Status')
+                    ->afterStateUpdated(function ($state, $record) {
+                        if ($state) {
+                            // Status changed to aktif, send email
+                            Mail::to($record->email)->send(new MahasiswaBaruActivated($record->nama_lengkap));
+                        }
+                    })
 
 
-        ]);
-}
+            ]);
+    }
 
     public static function getRelations(): array
     {
