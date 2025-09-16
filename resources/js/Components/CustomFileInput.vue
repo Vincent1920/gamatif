@@ -3,14 +3,15 @@
         <label :for="id" class="block text-sm font-medium text-gray-700">{{
             label
         }}</label>
+        <span class="text-sm text-gray-500 block">Maksimal 2 MB</span>
 
         <div class="mt-1">
             <label
                 :for="id"
                 class="relative flex items-center px-4 py-2 w-full rounded-lg border cursor-pointer transition hover:bg-gray-50"
                 :class="[
-                    error ? 'border-red-500 bg-red-50' : 'border-gray-300',
-                    isUploaded ? 'border-green-500 bg-green-50' : '',
+                    (error || sizeError) ? 'border-red-500 bg-red-50' : 'border-gray-300',
+                    isUploaded && !sizeError ? 'border-green-500 bg-green-50' : '',
                 ]"
             >
                 <span
@@ -21,9 +22,9 @@
 
                 <span
                     class="ml-4 text-sm truncate flex-1"
-                    :class="isUploaded ? 'text-gray-700' : 'text-gray-500'"
+                    :class="(error || sizeError) ? 'text-red-500' : (isUploaded ? 'text-gray-700' : 'text-gray-500')"
                 >
-                    {{ fileText }}
+                    {{ sizeError || fileText }}
                 </span>
 
                 <input
@@ -75,6 +76,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const selectedFiles = ref([]);
+const sizeError = ref('');
 
 const fileText = computed(() => {
     if (props.multiple) {
@@ -93,16 +95,33 @@ const isUploaded = computed(() => selectedFiles.value.length > 0);
 
 const handleFileChange = (event) => {
     const files = event.target.files;
+    sizeError.value = '';
 
-    if (props.multiple) {
-        // For multiple files, add new files to existing ones
-        const newFiles = Array.from(files);
-        selectedFiles.value = [...selectedFiles.value, ...newFiles];
-        emit("update:modelValue", selectedFiles.value);
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    let hasError = false;
+
+    for (let i = 0; i < files.length; i++) {
+        if (files[i].size > maxSize) {
+            hasError = true;
+            break;
+        }
+    }
+
+    if (hasError) {
+        sizeError.value = 'upload gagal, tidak bisa upload lebih dari 2mb';
+        selectedFiles.value = [];
+        emit("update:modelValue", props.multiple ? [] : null);
     } else {
-        const file = files[0] || null;
-        selectedFiles.value = file ? [file] : [];
-        emit("update:modelValue", file);
+        if (props.multiple) {
+            // For multiple files, add new files to existing ones
+            const newFiles = Array.from(files);
+            selectedFiles.value = [...selectedFiles.value, ...newFiles];
+            emit("update:modelValue", selectedFiles.value);
+        } else {
+            const file = files[0] || null;
+            selectedFiles.value = file ? [file] : [];
+            emit("update:modelValue", file);
+        }
     }
 
     // Clear the input so the same file can be selected again
