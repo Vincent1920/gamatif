@@ -81,6 +81,7 @@ class AccpetDatamabaResource extends Resource
                 TextColumn::make('email')
                     ->label('Email')
                     ->searchable(),
+                    
                 // tampilkan file bukti registrasi
                 ImageColumn::make('bukti_registrasi')
                     ->label('Bukti Registrasi')
