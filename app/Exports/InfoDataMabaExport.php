@@ -35,6 +35,7 @@ class InfoDataMabaExport implements FromQuery, WithHeadings, WithMapping
         return [
             'NIM',
             'Nama Lengkap',
+            'Nomor WhatsApp',   
             'Kelompok',
         ];
     }
@@ -44,6 +45,7 @@ class InfoDataMabaExport implements FromQuery, WithHeadings, WithMapping
         return [
             $row->nim,
             $row->nama_lengkap,
+            $row->nomor_whatsapp,
             $row->kelompok->nama_kelompok ?? 'Maba belum ambil kelompok',
         ];
     }

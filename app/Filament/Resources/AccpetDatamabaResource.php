@@ -5,12 +5,14 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use Actions\DeleteAction;
 use Filament\Tables\Table;
 use App\Models\AccpetDatamaba;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,13 +31,25 @@ class AccpetDatamabaResource extends Resource
     protected static ?string $navigationGroup = 'Data Master';
     protected static ?string $pluralModelLabel = 'Accpe Datamahasiswa';
     protected static ?int $navigationSort = 1;
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
-    }
+  public static function form(Form $form): Form
+{
+    return $form
+        ->schema([
+            TextInput::make('email')
+                ->label('Email')
+                ->email()
+                ->required()
+                ->unique(ignoreRecord: true), // biar tidak bentrok kalau edit
+
+            TextInput::make('password')
+                ->label('Password')
+                ->password()
+                ->dehydrateStateUsing(fn ($state) => bcrypt($state)) // otomatis hash
+                ->required(fn (string $context): bool => $context === 'create') // wajib saat create
+                ->dehydrated(fn ($state) => filled($state)) // hanya update kalau diisi
+                ->visible(fn (string $context): bool => $context !== 'view'),
+        ]);
+}
 
     public static function table(Table $table): Table
     {
@@ -87,9 +101,20 @@ class AccpetDatamabaResource extends Resource
                         }
                     })
 
-
+        ])
+         ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+         
+        ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
-    }
+
+}
+
 
     public static function getRelations(): array
     {
