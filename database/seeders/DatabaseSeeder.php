@@ -19,18 +19,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Daftar nama kelompok + url grup
-        $kelompokData = [
+     $kelompokData = [
             ['nama_kelompok' => 'Gipsy Danger', 'url_grub' => 'https://chat.whatsapp.com/BZsFiidskgqL22jrzFDdol'],
-            ['nama_kelompok' => 'Striker Eureka', 'url_grub' => 'https://chat.whatsapp.com/BBVfieNwyW3Al1Vjfe5tPg'],
+            ['nama_kelompok' => 'Striker Eureka', 'url_grub' => 'https://chat.whatsapp.com/BBVfieNwyW3AI1Vjfe5tPg?mode=ems_wa_t'],
             ['nama_kelompok' => 'Crimson Typhoon', 'url_grub' => 'https://chat.whatsapp.com/BAQ2nT5accALPoqoLj7PUd'],
             ['nama_kelompok' => 'Cherno Alpha', 'url_grub' => 'https://chat.whatsapp.com/HcbjRPHB46cEalHnySS6V2'],
             ['nama_kelompok' => 'Bracer Phoenix', 'url_grub' => 'https://chat.whatsapp.com/I915MvyzQD6H25Xb3f38LB'],
             ['nama_kelompok' => 'Saber Athena', 'url_grub' => 'https://chat.whatsapp.com/F3V3tjONYn5LyBpBylGXS7'],
-            ['nama_kelompok' => 'Titan Redeemer', 'url_grub' => 'https://chat.whatsapp.com/DEhQLmCai ps7RCGhPYmZnv'],
+            ['nama_kelompok' => 'Titan Redeemer', 'url_grub' => 'https://chat.whatsapp.com/DEhQLmCai ps7RCGhPYmZnv'], // <-- hapus spasi
             ['nama_kelompok' => 'Guardian Bravo', 'url_grub' => 'https://chat.whatsapp.com/CeArAaJgKC9CQ3KAqlxFTu'],
             ['nama_kelompok' => 'Obsidian Fury', 'url_grub' => 'https://chat.whatsapp.com/DPN3iHxA2RBDJ0t4IRFTBQ'],
             ['nama_kelompok' => 'Horizon Brave', 'url_grub' => 'https://chat.whatsapp.com/LR2GP8JtLc09NZ2VDpRGhQ'],
         ];
+
 
         // Simpan data kelompok ke DB dan buat mapping
         $kelompoks = [];
