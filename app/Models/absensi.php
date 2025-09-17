@@ -22,7 +22,7 @@ class Absensi extends Model
     {
         return $this->belongsTo(MahasiswaBaru::class, 'mahasiswa_baru_id');
     }
-
+    //change commit
     public function jadwal()
     {
         return $this->belongsTo(JadwalKegiatan::class, 'jadwal_kegiatan_id');
