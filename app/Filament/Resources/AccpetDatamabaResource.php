@@ -92,7 +92,7 @@ public static function form(Form $form): Form
                 ->label('Kelompok')
                 ->relationship('kelompok', 'nama_kelompok')
                 ->searchable()
-                ->required(),
+                ->nullable(),
 
             TextInput::make('password')
                 ->label('Password')
