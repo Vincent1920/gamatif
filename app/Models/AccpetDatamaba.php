@@ -30,4 +30,8 @@ class AccpetDatamaba extends Model
         'bukti_sosmed' => 'array',
         'tanggal_lahir' => 'date',
     ];
+       public function kelompok()
+    {
+        return $this->belongsTo(\App\Models\Kelompok::class, 'kelompok_id');
+    }
 }
