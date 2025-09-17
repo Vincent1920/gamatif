@@ -23,7 +23,7 @@ class SosialMediaResource extends Resource
 {
     protected static ?string $model = SosialMedia::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-share';
     protected static ?string $navigationGroup = 'Pengaturan';
     protected static ?string $pluralModelLabel = 'Sosial Media';
     protected static ?int $navigationSort = 2;

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Mail\MahasiswaBaruRegistered;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -25,7 +26,20 @@ class MahasiswaBaruAuthController extends Controller
                 'nama_lengkap' => 'required|string|max:255',
                 'nim' => 'required|string|unique:mahasiswa_baru,nim',
                 'jenis_kelamin' => 'required|in:L,P',
-                'tanggal_lahir' => 'required|date',
+                'tanggal_lahir' => [
+                    'required',
+                    'date',
+                    function ($attribute, $value, $fail) {
+                        try {
+                            $date = \Carbon\Carbon::createFromFormat('Y-m-d', $value);
+                            if (!$date || $date->format('Y-m-d') !== $value) {
+                                $fail('Format tanggal lahir tidak valid.');
+                            }
+                        } catch (\Exception $e) {
+                            $fail('Format tanggal lahir tidak valid.');
+                        }
+                    },
+                ],
                 'alamat' => 'required|string',
                 'nomor_whatsapp' => 'required|string',
                 'email' => 'required|email|unique:mahasiswa_baru,email',
@@ -61,7 +75,7 @@ class MahasiswaBaruAuthController extends Controller
             // Generate password random
             $plainPassword = Str::random(8);
             $validatedData['password'] = Hash::make($plainPassword);
-            $validatedData['status'] = 'tidak_aktif';
+            $validatedData['status'] = false;
 
             // Simpan data mahasiswa
             $mahasiswa = MahasiswaBaru::create($validatedData);
@@ -72,6 +86,11 @@ class MahasiswaBaruAuthController extends Controller
                     new MahasiswaBaruRegistered($mahasiswa->nama_lengkap, $mahasiswa->email, $plainPassword)
                 );
             } catch (Exception $e) {
+                Log::error('Email sending failed during registration', [
+                    'user_id' => $mahasiswa->id ?? null,
+                    'email' => $mahasiswa->email ?? null,
+                    'error' => $e->getMessage(),
+                ]);
                 DB::rollBack();
                 // Opsional: Hapus file yang sudah diupload jika email gagal
                 // Storage::disk('public')->delete($validatedData['bukti_registrasi']);
@@ -79,9 +98,7 @@ class MahasiswaBaruAuthController extends Controller
                 return response()->json([
                     'message' => 'Gagal mengirim email pendaftaran. Silakan coba lagi.',
                     'kode' => 500,
-                    'payload' => [
-                        'error' => $e->getMessage(),
-                    ]
+                    'payload' => null
                 ], 500);
             }
 
@@ -100,13 +117,16 @@ class MahasiswaBaruAuthController extends Controller
                 'payload' => $e->errors(),
             ], 422);
         } catch (Exception $e) {
+            Log::error('Registration failed with server error', [
+                'request_data' => $request->all(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             DB::rollBack();
             return response()->json([
                 'message' => 'Terjadi kesalahan pada server. Silakan coba beberapa saat lagi.',
                 'kode' => 500,
-                'payload' => [
-                    'error' => $e->getMessage(),
-                ]
+                'payload' => null
             ], 500);
         }
     }
@@ -131,7 +151,7 @@ class MahasiswaBaruAuthController extends Controller
                 ], 401);
             }
 
-            if ($mahasiswa->status === 'tidak_aktif') {
+            if (!$mahasiswa->status) {
                 return response()->json([
                     'message' => 'Akun Anda belum aktif. Silakan tunggu konfirmasi panitia.',
                     'kode' => 403,

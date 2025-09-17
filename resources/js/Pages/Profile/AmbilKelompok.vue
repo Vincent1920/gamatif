@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <div
-            class="max-w-md w-full text-center bg-white rounded-xl shadow-lg p-8"
+            class="relative max-w-md w-full text-center bg-white rounded-xl shadow-lg p-8"
         >
             <!-- Error Message Display -->
             <div
@@ -40,6 +40,12 @@
 
             <!-- 2. Tampilan jika SUDAH punya kelompok -->
             <div v-else-if="kelompok">
+                <button
+                    class="absolute cursor-grab top-2 right-3 text-gray-500 hover:text-gray-700"
+                    @click="closeCard"
+                >
+                    ✕
+                </button>
                 <h1 class="text-2xl font-bold text-gray-800 mb-2">
                     Anda Sudah Terdaftar!
                 </h1>
@@ -163,13 +169,13 @@ const progressWidth = ref(0);
 const progressText = ref("");
 
 const placeholderKelompok = [
-    "apa ini si",
+    "Semoga kelompok dia",
     "Takutttt",
-    "asnkjfsafjkajndj",
+    "aaaa!!",
     "Bismillah",
     "Degdegannnn",
-    "Sama siapa yAA?????",
-    "Ummmmmmmmmmm",
+    "Sama siapa yaa?????",
+    "Ummmmmmm",
     "Semoga dapet pacar hehe",
     "Pengen sama DOIIII",
     "Kelompok Mana ya",
@@ -253,9 +259,9 @@ const handleGenerate = async () => {
                 colors: ["#f59e0b", "#10b981", "#3b82f6", "#ef4444", "#8b5cf6"],
             });
             // Redirect to dashboard after success
-            setTimeout(() => {
-                router.push('/dashboard-maba');
-            }, 2000); // Wait 2 seconds for confetti
+            // setTimeout(() => {
+            //     router.push("/dashboard-maba");
+            // }, 2000); // Wait 2 seconds for confetti
         }
     } catch (error) {
         clearInterval(randomizeInterval);
@@ -269,4 +275,8 @@ onUnmounted(() => {
     if (randomizeInterval) clearInterval(randomizeInterval);
     if (progressInterval) clearInterval(progressInterval);
 });
+
+const closeCard = () => {
+    router.push("/dashboard-maba");
+};
 </script>

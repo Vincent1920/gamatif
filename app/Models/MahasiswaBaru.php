@@ -34,6 +34,7 @@ class MahasiswaBaru extends Authenticatable
 
     protected $casts = [
         'bukti_sosmed' => 'array',
+        'status' => 'boolean',
     ];
 
     /**
@@ -44,5 +45,15 @@ class MahasiswaBaru extends Authenticatable
         // Relasi 'belongsTo' ke model Kelompok.
         // Laravel akan otomatis mencari foreign key 'kelompok_id' di tabel ini.
         return $this->belongsTo(Kelompok::class, 'kelompok_id');
+    }
+
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class);
+    }
+
+    public function izinKehadiran()
+    {
+        return $this->hasMany(IzinKehadiran::class);
     }
 }

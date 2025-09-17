@@ -10,6 +10,7 @@ use App\Models\PengaturanWeb;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -23,7 +24,7 @@ class PengaturanWebResource extends Resource
 {
     protected static ?string $model = PengaturanWeb::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $navigationGroup = 'Pengaturan';
     protected static ?string $pluralModelLabel = 'Pengaturan web';
     protected static ?int $navigationSort = 2;
@@ -113,34 +114,37 @@ public static function form(Form $form): Form
                                 ->previewable()
                                 ->downloadable()
                                 ->maxSize(5120),
-                            FileUpload::make('buku_saku')
+                          FileUpload::make('buku_saku')
                                 ->label('Buku Saku (PDF)')
                                 ->acceptedFileTypes(['application/pdf'])
                                 ->preserveFilenames()
                                 ->disk('public')
                                 ->directory('buku_saku')
+                                ->maxSize(10240) // max 10 MB
                                 ->downloadable()
-                                ->maxSize(10240), // max 10 MB
+                                ->openable() // biar bisa langsung dibuka
+
                         ]),
                 ]),
         ]);
 }
 
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                ImageColumn::make('logo_hmif')
-                ->label('logo hmif')
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            ImageColumn::make('logo_hmif')
+                ->label('Logo HMIF')
                 ->disk('public')
                 ->width(120)
                 ->height(70)
                 ->square()
                 ->url(fn ($record) => Storage::disk('public')->url($record->logo_hmif))
                 ->extraImgAttributes(['loading' => 'lazy']),
-             ImageColumn::make('logo_gamatif')
-                ->label('logo gamatif')
+
+            ImageColumn::make('logo_gamatif')
+                ->label('Logo Gamatif')
                 ->disk('public')
                 ->width(120)
                 ->height(70)
@@ -148,19 +152,28 @@ public static function form(Form $form): Form
                 ->url(fn ($record) => Storage::disk('public')->url($record->logo_gamatif))
                 ->extraImgAttributes(['loading' => 'lazy']),
 
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+            // Tambahin kolom untuk Buku Saku (PDF)
+            TextColumn::make('buku_saku')
+                ->label('Buku Saku')
+                ->url(fn ($record) => $record->buku_saku 
+                    ? asset('storage/' . $record->buku_saku) 
+                    : null)
+                ->openUrlInNewTab()
+                ->formatStateUsing(fn ($state) => $state ? '📕 Download PDF' : '-'),
+        ])
+        ->filters([
+            //
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
+
 
     public static function getRelations(): array
     {

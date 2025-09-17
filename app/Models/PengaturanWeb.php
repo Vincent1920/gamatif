@@ -19,6 +19,7 @@ class PengaturanWeb extends Model
         'logo_maskot',
         'admin_wa_1',
         'admin_wa_2',
+        'buku_saku',
         'email',
         'nama_kegiatan',
 

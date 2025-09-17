@@ -2,39 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Absensi extends DataMahasiswa
+class Absensi extends Model
 {
     use HasFactory;
 
+    protected $table = 'absensi';
+
+    protected $fillable = [
+        'mahasiswa_baru_id',
+        'jadwal_kegiatan_id',
+        'status',
+    ];
 
 
-    public function kelompokRelasi()
-{
-    return $this->belongsTo(Kelompok::class, 'kelompok');
-}
-
-// app/Models/Mahasiswa.php
-public function kelompok()
-{
-    return $this->belongsTo(Kelompok::class, 'kelompok_id', 'id');
-}
-
-public function mahasiswa()
-{
-    return $this->belongsTo(dataMahasiswa::class, 'mahasiswa_id', 'id');
-}
-
-public function dataMahasiswa()
+    public function mahasiswa()
     {
-        return $this->belongsTo(DataMahasiswa::class, 'data_mahasiswa_id');
+        return $this->belongsTo(MahasiswaBaru::class, 'mahasiswa_baru_id');
     }
-   
 
+    public function jadwal()
+    {
+        return $this->belongsTo(JadwalKegiatan::class, 'jadwal_kegiatan_id');
+    }
 }
-
-
-
-

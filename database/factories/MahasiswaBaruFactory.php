@@ -30,7 +30,7 @@ class MahasiswaBaruFactory extends Factory
                 'dummy/sosmed_1.jpg',
                 'dummy/sosmed_2.png',
             ],
-            'status' => fake()->randomElement(['tidak_aktif', 'aktif']),
+            'status' => fake()->boolean(),
             'password' => Hash::make('password'), // Password default untuk semua
         ];
     }
