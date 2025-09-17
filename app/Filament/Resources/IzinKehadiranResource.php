@@ -24,27 +24,26 @@ class IzinKehadiranResource extends Resource
         return $form->schema([
 
 
-            Forms\Components\Select::make('mahasiswa_baru_id')
-                ->label('Mahasiswa')
-                ->options(function (callable $get) {
-                    $kelompokId = $get('kelompok_id');
+          Forms\Components\Select::make('mahasiswa_baru_id')
+            ->label('Mahasiswa')
+            ->options(function () {
+                $user = auth()->user();
 
-                    return MahasiswaBaru::with('kelompok')
-                        ->when($kelompokId, fn($q) => $q->where('kelompok_id', $kelompokId))
-                        ->limit(20)
-                        ->get()
-                        ->mapWithKeys(function ($m) {
-                            $kelompok = $m->kelompok?->nama_kelompok ?? '-';
-                            return [
-                                $m->id => "{$m->nim} - {$m->nama_lengkap} ({$kelompok})",
-                            ];
-                        })
-                        ->toArray();
-                })
-                ->searchable()
-                ->preload() 
-                ->reactive()
-                ->required(),
+                return \App\Models\MahasiswaBaru::with('kelompok:id,nama_kelompok')
+                    ->when($user->role === 'pk', fn($q) => $q->where('kelompok_id', $user->kelompok_id))
+                    ->limit(50) 
+                    ->get()
+                    ->mapWithKeys(function ($m) {
+                        return [
+                            $m->id => "{$m->nim} - {$m->nama_lengkap} (" . ($m->kelompok->nama_kelompok ?? '-') . ")",
+                        ];
+                    })
+                    ->toArray();
+            })
+            ->searchable()
+            ->preload()
+            ->reactive()
+            ->required(),
 
 
             Forms\Components\Select::make('jadwal_kegiatan_id')
