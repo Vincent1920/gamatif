@@ -2,18 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\Absensi;
+use App\Models\MahasiswaBaru;
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Absensi;
-use App\Models\Kelompok;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Models\DataMahasiswa;
 use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Columns\CheckboxColumn;
 use App\Filament\Resources\AbsensiResource\Pages;
 
 class AbsensiResource extends Resource
@@ -22,80 +17,110 @@ class AbsensiResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup = 'Absensi Mahasiswa';
     protected static ?int $navigationSort = 3;
-    // Label dinamis per kelompok (opsional, bisa pakai Blade)
     protected static ?string $pluralModelLabel = 'Absensi';
 
-  
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+            Forms\Components\Select::make('mahasiswa_baru_id')
+                ->label('Mahasiswa')
+                ->options(function (callable $get) {
+                    $kelompokId = $get('kelompok_id');
 
-public static function table(Table $table): Table
-{
-    return $table
-        ->defaultPaginationPageOption('all')
-        ->defaultSort('nim', 'asc') 
-        ->columns([
-            TextColumn::make('index')
-                ->label('No')
-                ->rowIndex(),
+                    return MahasiswaBaru::with('kelompok')
+                        ->when($kelompokId, fn($q) => $q->where('kelompok_id', $kelompokId))
+                        ->limit(20)
+                        ->get()
+                        ->mapWithKeys(function ($m) {
+                            $kelompok = $m->kelompok?->nama_kelompok ?? '-';
+                            return [
+                                $m->id => "{$m->nim} - {$m->nama_lengkap} ({$kelompok})",
+                            ];
+                        })
+                        ->toArray();
+                })
+                ->disabled(),
 
-            TextColumn::make('nim')
-                ->label('NIM')
-                ->searchable()
-                ->sortable(),
+            Forms\Components\Select::make('jadwal_kegiatan_id')
+                ->label('Jadwal Kegiatan')
+                ->relationship('jadwal', 'nama')
+                ->disabled(),
 
-            TextColumn::make('nama')
-                ->label('Nama')
-                ->searchable()
-                ->sortable(),
-
-            TextColumn::make('kelompok.nama_kelompok')
-                ->label('Kelompok')
-              ->formatStateUsing(fn ($state) => str_replace('_', ' ', $state)),
-                // ->formatStateUsing(fn ($state, $record) => $state ?? 'Kelompok ID: ' . $record->kelompok_id),
-
-            CheckboxColumn::make('day_1')->label('Day 1'),
-            CheckboxColumn::make('day_2')->label('Day 2'),
-            CheckboxColumn::make('day_3')->label('Day 3'),
-        ])
-        ->filters(array_filter([
-            auth()->user()->role === 'admin'
-                ? SelectFilter::make('kelompok_id')
-                    ->label('Kelompok')
-                    ->relationship('kelompok', 'nama_kelompok')
-                : null,
-        ]));
-}
-
-public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
-{
-    $query = parent::getEloquentQuery();
-
-    $user = auth()->user();
-
-    if ($user->role === 'pk') {
-        $query->where('kelompok_id', $user->kelompok_id);
+                Forms\Components\Toggle::make('status')
+                    ->label('Hadir')
+                    ->default(false)
+                    ->disabled(),
+        ]);
     }
 
-    return $query;
-}
-
-
-
-    public static function getRelations(): array
+    public static function table(Table $table): Table
     {
-        return [
-            //
-        ];
+        return $table
+            ->defaultSort('created_at', 'desc')
+            ->columns([
+                Tables\Columns\TextColumn::make('mahasiswa.nim')
+                    ->label('NIM')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('mahasiswa.nama_lengkap')
+                    ->label('Nama')
+                    ->sortable()
+                    ->searchable()
+                    ->disabled(),
+
+                Tables\Columns\TextColumn::make('mahasiswa.kelompok.nama_kelompok')
+                    ->label('Kelompok'),
+
+                Tables\Columns\TextColumn::make('jadwal.nama')
+                    ->label('Kegiatan'),
+
+                Tables\Columns\BadgeColumn::make('status')
+                    ->label('Status')
+                    ->colors([
+                        'success' => 'hadir',
+                        'warning' => 'telat',
+                        'info'    => 'izin',
+                        'gray'  => 'sakit',
+                        'danger' => 'alpa',
+                    ])
+                    ->formatStateUsing(fn(string $state) => ucfirst($state)),
+
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Waktu Absen')
+                    ->dateTime('d M Y H:i'),
+
+
+            ])
+            ->filters([
+                Tables\Filters\SelectFilter::make('mahasiswa.kelompok_id')
+                    ->label('Kelompok')
+                    ->relationship('mahasiswa.kelompok', 'nama_kelompok'),
+            ]);
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+        if ($user->role === 'pk') {
+            // Filter berdasarkan kelompok user PK
+            $query->whereHas('mahasiswa.kelompok', function ($q) use ($user) {
+                $q->where('kelompok_id', $user->kelompok_id);
+            });
+        }
+
+        return $query;
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListAbsensis::route('/'),
-            // 'create' => Pages\CreateAbsensi::route('/create'),
-            // 'edit' => Pages\EditAbsensi::route('/{record}/edit'),
+            'create' => Pages\CreateAbsensi::route('/create'),
+            'edit' => Pages\EditAbsensi::route('/{record}/edit'),
         ];
     }
-
-
-
 }

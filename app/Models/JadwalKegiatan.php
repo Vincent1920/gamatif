@@ -17,4 +17,14 @@ class JadwalKegiatan extends Model
         'waktu_mulai',
         'waktu_selesai',
     ];
+
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class);
+    }
+
+    public function izinKehadiran()
+    {
+        return $this->hasMany(IzinKehadiran::class);
+    }
 }

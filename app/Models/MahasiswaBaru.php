@@ -46,4 +46,14 @@ class MahasiswaBaru extends Authenticatable
         // Laravel akan otomatis mencari foreign key 'kelompok_id' di tabel ini.
         return $this->belongsTo(Kelompok::class, 'kelompok_id');
     }
+
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class);
+    }
+
+    public function izinKehadiran()
+    {
+        return $this->hasMany(IzinKehadiran::class);
+    }
 }

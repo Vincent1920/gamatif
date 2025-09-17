@@ -29,27 +29,27 @@ class AccpetDatamabaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
     protected static ?string $navigationGroup = 'Data Master';
-    protected static ?string $pluralModelLabel = 'Accpe Datamahasiswa';
+    protected static ?string $pluralModelLabel = 'Acc Maba';
     protected static ?int $navigationSort = 1;
-  public static function form(Form $form): Form
-{
-    return $form
-        ->schema([
-            TextInput::make('email')
-                ->label('Email')
-                ->email()
-                ->required()
-                ->unique(ignoreRecord: true), // biar tidak bentrok kalau edit
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                TextInput::make('email')
+                    ->label('Email')
+                    ->email()
+                    ->required()
+                    ->unique(ignoreRecord: true), // biar tidak bentrok kalau edit
 
-            TextInput::make('password')
-                ->label('Password')
-                ->password()
-                ->dehydrateStateUsing(fn ($state) => bcrypt($state)) // otomatis hash
-                ->required(fn (string $context): bool => $context === 'create') // wajib saat create
-                ->dehydrated(fn ($state) => filled($state)) // hanya update kalau diisi
-                ->visible(fn (string $context): bool => $context !== 'view'),
-        ]);
-}
+                TextInput::make('password')
+                    ->label('Password')
+                    ->password()
+                    ->dehydrateStateUsing(fn($state) => bcrypt($state)) // otomatis hash
+                    ->required(fn(string $context): bool => $context === 'create') // wajib saat create
+                    ->dehydrated(fn($state) => filled($state)) // hanya update kalau diisi
+                    ->visible(fn(string $context): bool => $context !== 'view'),
+            ]);
+    }
 
     public static function table(Table $table): Table
     {
@@ -81,7 +81,7 @@ class AccpetDatamabaResource extends Resource
                 TextColumn::make('email')
                     ->label('Email')
                     ->searchable(),
-                    
+
                 // tampilkan file bukti registrasi
                 ImageColumn::make('bukti_registrasi')
                     ->label('Bukti Registrasi')
@@ -102,19 +102,18 @@ class AccpetDatamabaResource extends Resource
                         }
                     })
 
-        ])
-         ->actions([
+            ])
+            ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-         
-        ->bulkActions([
+
+            ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-
-}
+    }
 
 
     public static function getRelations(): array
