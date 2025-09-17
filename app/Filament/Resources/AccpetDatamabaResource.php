@@ -10,18 +10,23 @@ use Filament\Tables\Table;
 use App\Models\AccpetDatamaba;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
+use App\Mail\MahasiswaBaruActivated;
+use Illuminate\Support\Facades\Mail;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\CheckboxColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AccpetDatamabaResource\Pages;
 use App\Filament\Resources\AccpetDatamabaResource\RelationManagers;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MahasiswaBaruActivated;
 
 class AccpetDatamabaResource extends Resource
 {
@@ -31,25 +36,77 @@ class AccpetDatamabaResource extends Resource
     protected static ?string $navigationGroup = 'Data Master';
     protected static ?string $pluralModelLabel = 'Acc Maba';
     protected static ?int $navigationSort = 1;
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                TextInput::make('email')
-                    ->label('Email')
-                    ->email()
-                    ->required()
-                    ->unique(ignoreRecord: true), // biar tidak bentrok kalau edit
+public static function form(Form $form): Form
+{
+    return $form
+        ->schema([
+            TextInput::make('nama_lengkap')
+                ->label('Nama Lengkap')
+                ->required()
+                ->maxLength(255),
 
-                TextInput::make('password')
-                    ->label('Password')
-                    ->password()
-                    ->dehydrateStateUsing(fn($state) => bcrypt($state)) // otomatis hash
-                    ->required(fn(string $context): bool => $context === 'create') // wajib saat create
-                    ->dehydrated(fn($state) => filled($state)) // hanya update kalau diisi
-                    ->visible(fn(string $context): bool => $context !== 'view'),
-            ]);
-    }
+            TextInput::make('nim')
+                ->label('NIM')
+                ->required()
+                ->unique(ignoreRecord: true)
+                ->maxLength(255),
+
+            Select::make('jenis_kelamin')
+                ->label('Jenis Kelamin')
+                ->options([
+                    'L' => 'Laki-laki',
+                    'P' => 'Perempuan',
+                ])
+                ->required(),
+
+            DatePicker::make('tanggal_lahir')
+                ->label('Tanggal Lahir')
+                ->required(),
+
+            Textarea::make('alamat')
+                ->label('Alamat')
+                ->rows(3),
+
+            TextInput::make('nomor_whatsapp')
+                ->label('Nomor WhatsApp')
+                ->tel()
+                ->maxLength(255),
+
+            TextInput::make('email')
+                ->label('Email')
+                ->email()
+                ->unique(ignoreRecord: true)
+                ->required(),
+
+            FileUpload::make('bukti_sosmed')
+                ->label('Bukti Sosmed')
+                ->directory('bukti_sosmed')
+                ->multiple()
+                ->reorderable(),
+
+            FileUpload::make('bukti_registrasi')
+                ->label('Bukti Registrasi')
+                ->directory('bukti_registrasi'),
+
+            Select::make('kelompok_id')
+                ->label('Kelompok')
+                ->relationship('kelompok', 'nama_kelompok')
+                ->searchable()
+                ->required(),
+
+            TextInput::make('password')
+                ->label('Password')
+                ->password()
+                ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
+                ->required(fn(string $context): bool => $context === 'create')
+                ->dehydrated(fn($state) => filled($state))
+                ->visible(fn(string $context): bool => $context !== 'view'),
+
+            Toggle::make('status')
+                ->label('Status')
+                ->default(true),
+        ]);
+}
 
     public static function table(Table $table): Table
     {
@@ -128,7 +185,7 @@ class AccpetDatamabaResource extends Resource
         return [
             'index' => Pages\ListAccpetDatamabas::route('/'),
             // 'create' => Pages\CreateAccpetDatamaba::route('/create'),
-            // 'edit' => Pages\EditAccpetDatamaba::route('/{record}/edit'),
+            'edit' => Pages\EditAccpetDatamaba::route('/{record}/edit'),
         ];
     }
 }
