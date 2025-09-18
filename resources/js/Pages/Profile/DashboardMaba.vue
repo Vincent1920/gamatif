@@ -1,5 +1,5 @@
 <template>
-    <div class="p-8 mt-15" v-if="user">
+    <div class="p-8 mt-10" v-if="user">
         <!-- Judul -->
         <h1 class="text-3xl font-bold mb-8 text-gray-800">
             Selamat Datang,
@@ -60,7 +60,7 @@
                     class="text-white px-4 py-2 rounded-lg text-sm w-full"
                     :class="
                         user.kelompok
-                            ? 'bg-green-500 hover:bg-green-600'
+                            ? 'bg-green-500 hover:bg-green-600 cursor-grab'
                             : 'bg-gray-300 cursor-not-allowed'
                     "
                     @click="goToGrup"
@@ -73,7 +73,7 @@
                     :disabled="!isBukuSakuAvailable"
                     :class="
                         isBukuSakuAvailable
-                            ? 'bg-blue-500 hover:bg-blue-600'
+                            ? 'bg-blue-500 hover:bg-blue-600 cursor-grab'
                             : 'bg-gray-300 cursor-not-allowed'
                     "
                 >
@@ -81,9 +81,14 @@
                 </button>
 
                 <button
-                    disabled
-                    class="text-white px-4 py-2 rounded-lg text-sm w-full bg-gray-300 cursor-not-allowed"
-                    @click=""
+                    :disabled="!user.kelompok"
+                    class="text-white px-4 py-2 rounded-lg text-sm w-full"
+                    @click="goToAbsen"
+                    :class="
+                        user.kelompok
+                            ? 'bg-blue-500 hover:bg-blue-600 cursor-grab'
+                            : 'bg-gray-300 cursor-not-allowed'
+                    "
                 >
                     Absen
                 </button>
@@ -279,5 +284,8 @@ const goToGrup = () => {
 
 const goToAmbilKelompok = () => {
     router.push("/ambil-kelompok");
+};
+const goToAbsen = () => {
+    router.push("/absen-maba");
 };
 </script>

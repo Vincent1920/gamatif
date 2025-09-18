@@ -7,6 +7,7 @@ import LoginPage from "../Pages/Auth/Login.vue";
 import DashboardMabaPage from "../Pages/Profile/DashboardMaba.vue";
 import ProfilePage from "../Pages/Profile/DetailProfile.vue";
 import AmbilKelompokPage from "../Pages/Profile/AmbilKelompok.vue";
+import AbsenMaba from "../Pages/Profile/AbsenMaba.vue";
 
 const routes = [
     {
@@ -40,6 +41,11 @@ const routes = [
         path: "/ambil-kelompok",
         name: "ambil_kelompok",
         component: AmbilKelompokPage,
+    },
+    {
+        path: "/absen-maba",
+        name: "absen-maba",
+        component: AbsenMaba,
     },
 ];
 

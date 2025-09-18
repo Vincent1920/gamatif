@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Absensi;
+use App\Models\JadwalKegiatan;
 
 class ProfileController extends Controller
 {
@@ -54,5 +56,26 @@ class ProfileController extends Controller
         ]);
 
         return response()->json(['message' => 'Password berhasil diganti']);
+    }
+
+    // GET /api/absensi - ambil data absensi untuk user yang sedang login
+    public function getAbsensi(Request $request)
+    {
+        $user = $request->user();
+
+        $jadwal = JadwalKegiatan::all();
+
+        $rekap = $jadwal->map(function ($item) use ($user) {
+            $absensi = Absensi::where('mahasiswa_baru_id', $user->id)
+                ->where('jadwal_kegiatan_id', $item->id)
+                ->first();
+
+            return [
+                'hari' => $item->nama,
+                'status' => $absensi ? ucfirst($absensi->status) : 'Belum Absen',
+            ];
+        });
+
+        return response()->json($rekap);
     }
 }

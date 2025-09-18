@@ -1,6 +1,12 @@
-# TODO: Fix jadwal_kegiatan_id in Absensi QR
+# TODO: Implement Auto Mark Absent Feature
 
-1. [x] Modify AbsenQR.php submit method to find jadwal_kegiatan where tanggal == today().
-2. [x] If jadwal found, set jadwal_kegiatan_id and proceed with firstOrCreate using both mahasiswa_baru_id and jadwal_kegiatan_id.
-3. [x] If not found, show notification "tidak ada kegiatan hari ini".
-4. [x] Test the QR absensi page to ensure it works.
+## Steps:
+- [x] Create Artisan command: AutoMarkAbsent
+- [x] Edit command to check jadwal_kegiatan and create absensi 'alpa' for absent mahasiswa
+- [x] Schedule command in Kernel.php to run every hour
+- [x] Test the command manually
+- [x] Verify scheduling works
+
+## Notes:
+- Command checks jadwal where tanggal == today and waktu_mulai + 1 hour < now
+- For each such jadwal, create absensi 'alpa' for mahasiswa_baru not yet having absensi for that jadwal
