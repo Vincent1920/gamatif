@@ -1,19 +1,32 @@
 <template>
-    <div class="p-4 sm:p-8 mt-10">
+    <div class="p-4 sm:p-8 mt-5">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
-                <div class="flex flex-wrap justify-between items-center">
-                    <h2 class="text-xl font-bold text-gray-800">QR Absensi</h2>
-
+                <div class="flex flex-wrap justify-start items-center gap-10">
                     <button
-                        @click="downloadPdf"
-                        class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 cursor-grab text-white"
+                        @click="goBack"
+                        class="hidden sm:inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 hover:bg-gray-100 transition mb-2 cursor-grab"
                     >
-                        Download PDF
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-3 w-3 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                            />
+                        </svg>
+                        Kembali
                     </button>
+                    <h2 class="text-xl font-bold text-gray-800">QR Absensi</h2>
                 </div>
                 <div
-                    class="p-4 pt-10 mt-3 rounded-lg bg-gray-50 flex flex-col items-center justify-center"
+                    class="p-4 pt-10 mt-1 rounded-lg bg-gray-50 flex flex-col items-center justify-center"
                 >
                     <p class="text-gray-600 mb-4">
                         Pindai kode QR ini untuk absensi
@@ -32,6 +45,12 @@
                     >
                         {{ authStore.user?.nim }}
                     </p>
+                    <button
+                        @click="downloadPdf"
+                        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 cursor-grab text-white mb-2"
+                    >
+                        Download PDF
+                    </button>
                 </div>
             </div>
 
@@ -41,7 +60,22 @@
                 <h2 class="text-xl font-bold text-gray-800 mb-4">
                     Rekap Kehadiran Anda
                 </h2>
-                <div class="space-y-4">
+
+                <div
+                    v-if="absenStore.isLoading"
+                    class="space-y-4 animate-pulse"
+                >
+                    <div
+                        v-for="n in 3"
+                        :key="n"
+                        class="flex justify-between items-center bg-white/60 p-4 rounded-lg"
+                    >
+                        <SkeletonLoader customClass="h-4 w-1/4" />
+                        <SkeletonLoader customClass="h-6 w-1/3 rounded-full" />
+                    </div>
+                </div>
+
+                <div v-else class="space-y-4">
                     <div
                         v-for="absen in absenStore.rekapAbsensi"
                         :key="absen.hari"
@@ -65,6 +99,7 @@
 
 <script setup>
 import { ref, onMounted, computed, nextTick, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
 import QrcodeVue from "qrcode.vue";
 import jsPDF from "jspdf";
 import { useAuthStore } from "@/Stores/authStore";
@@ -73,6 +108,10 @@ import { useAbsenStore } from "@/Stores/absenStore";
 // Stores
 const authStore = useAuthStore();
 const absenStore = useAbsenStore();
+const router = useRouter();
+const goBack = () => {
+    router.back();
+};
 
 // Refs
 const qrRef = ref(null);
