@@ -57,8 +57,8 @@
             <label class="block text-sm text-gray-600 mb-1">Status</label>
             <div class="flex items-center gap-2">
               <span class="w-3 h-3 rounded-full"
-                :class="form.status === 'aktif' ? 'bg-green-500' : 'bg-red-500'"></span>
-              <span class="text-sm capitalize text-gray-600">{{ form.status }}</span>
+                :class="form.status === true ? 'bg-green-500' : 'bg-red-500'"></span>
+              <span class="text-sm capitalize text-gray-600">{{ form.status === true ? 'Aktif' : 'Belum Aktif' }}</span>
             </div>
           </div>
 
