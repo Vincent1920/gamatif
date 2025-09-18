@@ -21,7 +21,6 @@
     "dependencies": {
         "canvas-confetti": "^1.9.3",
         "confetti": "^2.0.6",
-        "html2pdf.js": "^0.12.1",
         "jspdf": "^3.0.3",
         "pinia": "^3.0.3",
         "qrcode": "^1.5.4",
