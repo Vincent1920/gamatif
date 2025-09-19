@@ -167,8 +167,8 @@ class AbsensiResource extends Resource
     {
         return [
             'index' => Pages\ListAbsensis::route('/'),
-            // 'create' => Pages\CreateAbsensi::route('/create'),
-            // 'edit' => Pages\EditAbsensi::route('/{record}/edit'),
+            'create' => Pages\CreateAbsensi::route('/create'),
+            'edit' => Pages\EditAbsensi::route('/{record}/edit'),
         ];
     }
 }

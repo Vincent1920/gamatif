@@ -7,11 +7,11 @@
             <h2
                 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-white"
             >
-                Tinggalkan Pesan & Kesan
+                Tinggalkan Kesan & Pesan
             </h2>
             <p class="mt-4 text-lg text-gray-400">
-                Bagikan harapan atau kesan pertamamu sebagai bagian dari
-                keluarga besar Teknik Informatika!
+                Bagikan kesan atau pesan pertamamu sebagai bagian dari keluarga
+                besar Teknik Informatika!
             </p>
 
             <form @submit.prevent="handleSubmit" class="mt-8 space-y-6">
@@ -25,10 +25,9 @@
                             name="nama"
                             id="nama"
                             required
-                            class="block w-full px-4 py-3 rounded-md bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+                            class="block w-full px-4 py-3 rounded-md bg-white border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
                             :class="{
-                                'bg-gray-800 cursor-not-allowed':
-                                    isAnonymous,
+                                'bg-gray-800 cursor-not-allowed': isAnonymous,
                             }"
                             placeholder="Nama Lengkap"
                         />
@@ -38,7 +37,7 @@
                             id="checked-checkbox"
                             type="checkbox"
                             v-model="isAnonymous"
-                            class="w-4 h-4 text-yellow-600  rounded focus:ring-yellow-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+                            class="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-600 ring-offset-gray-800 focus:ring-2"
                         />
                         <label
                             for="checked-checkbox"
@@ -49,15 +48,15 @@
                 </div>
 
                 <div>
-                    <label for="pesan" class="sr-only">Pesan & Kesan</label>
+                    <label for="pesan" class="sr-only">Kesan & Pesan</label>
                     <textarea
                         v-model="form.pesan"
                         name="pesan"
                         id="pesan"
                         rows="4"
                         required
-                        class="block w-full px-4 py-3 rounded-md bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        placeholder="Tulis pesan dan kesanmu di sini..."
+                        class="block w-full px-4 py-3 rounded-md bg-white border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="Tulis kesan & pesanmu di sini..."
                     ></textarea>
                 </div>
 
@@ -67,7 +66,11 @@
                         :disabled="kritikSaranStore.isLoading"
                         class="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-900 transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {{ kritikSaranStore.isLoading ? 'Mengirim...' : 'Kirim Pesan' }}
+                        {{
+                            kritikSaranStore.isLoading
+                                ? "Mengirim..."
+                                : "Kirim Pesan"
+                        }}
                     </button>
                 </div>
             </form>
@@ -79,27 +82,45 @@
                 class="h-50"
                 src="../../../public/images/kontak-pesawat.png"
                 alt=""
+                loading="lazy"
             />
         </div>
         <footer class="mt-30">
             <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8 px-8">
                 <div class="md:flex md:justify-between">
                     <div class="mb-6 flex md:mb-0">
-                        <div class="mb-6 flex md:mb-0">
+                        <div
+                            v-if="isPengaturanLoading"
+                            class="flex items-center gap-3"
+                        >
+                            <SkeletonLoader
+                                customClass="h-12 w-12 rounded-full"
+                            />
+                            <SkeletonLoader
+                                customClass="h-12 w-12 rounded-full"
+                            />
+                            <SkeletonLoader
+                                customClass="h-12 w-12 rounded-full"
+                            />
+                        </div>
+                        <div v-else class="mb-6 flex md:mb-0">
                             <img
                                 :src="logoUnikomUrl"
                                 class="h-15 me-3"
                                 alt="Logo UNIKOM"
+                                loading="lazy"
                             />
                             <img
                                 :src="logoHMIFtUrl"
                                 class="h-15 me-3"
                                 alt="Logo HMIF"
+                                loading="lazy"
                             />
                             <img
                                 :src="logoKabinetUrl"
                                 class="h-15 me-3"
                                 alt="Logo Kabinet"
+                                loading="lazy"
                             />
                         </div>
                     </div>
@@ -271,9 +292,10 @@
 
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
-import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
 import { useKritikSaranStore } from "@/Stores/kritikSaranStore";
 import { storeToRefs } from "pinia";
+import { usePengaturanWebStore } from "@/Stores/pengaturanWebStore";
+import SkeletonLoader from "@/Components/SkeletonLoader.vue";
 
 // Store form pesan
 const form = ref({ nama: "", pesan: "" });
@@ -309,7 +331,8 @@ const handleSubmit = async () => {
 // AMBIL LOGO DARI API
 // ==============================
 const pengaturanWebStore = usePengaturanWebStore();
-const { pengaturanWeb } = storeToRefs(pengaturanWebStore);
+const { pengaturanWeb, isLoading: isPengaturanLoading } =
+    storeToRefs(pengaturanWebStore);
 
 onMounted(() => {
     pengaturanWebStore.fetchPengaturanWeb();

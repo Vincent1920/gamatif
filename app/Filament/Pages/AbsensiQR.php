@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Filament\Resources\AbsensiResource\Pages;
+namespace App\Filament\Pages;
 
-use Filament\Resources\Pages\Page;
+use Filament\Pages\Page;
+
 use App\Models\MahasiswaBaru;
-use App\Models\JadwalKegiatan;
 use Filament\Notifications\Notification;
 
-class AbsenQR extends Page
+class AbsensiQR extends Page
 {
-    protected static string $resource = \App\Filament\Resources\AbsensiResource::class;
-
-    protected static string $view = 'filament.pages.absensi-q-r';
-
+    protected static bool $shouldRegisterNavigation = false;
+    protected static string $view = 'filament.pages.absensi';
     protected static ?string $title = 'Absensi Seminar';
 
-    public $kodeAbsen = '';
+    public $nimMaba = '';
 
     // Dipanggil saat form auto-submit atau klik button
     public function submit()
@@ -24,7 +22,7 @@ class AbsenQR extends Page
             'kodeAbsen' => 'required|string',
         ]);
 
-        $maba = MahasiswaBaru::where('nim', $this->kodeAbsen)->first();
+        $maba = MahasiswaBaru::where('nim', $this->nimMaba)->first();
 
         if (! $maba) {
             Notification::make()
@@ -34,21 +32,10 @@ class AbsenQR extends Page
             return;
         }
 
-        // Cari jadwal kegiatan hari ini
-        $jadwal = JadwalKegiatan::where('tanggal', today())->first();
-
-        if (!$jadwal) {
-            Notification::make()
-                ->danger()
-                ->title('tidak ada kegiatan hari ini')
-                ->send();
-            return;
-        }
-
         // Insert absensi jika belum ada
         $absen = \App\Models\Absensi::firstOrCreate(
-            ['mahasiswa_baru_id' => $maba->id, 'jadwal_kegiatan_id' => $jadwal->id],
-            ['status' => 'hadir']
+            ['mahasiswa_baru_id' => $maba->id],
+            ['created_at' => now()]
         );
 
         if ($absen->wasRecentlyCreated) {
@@ -63,6 +50,6 @@ class AbsenQR extends Page
                 ->send();
         }
 
-        $this->reset('kodeAbsen'); // kosongkan input biar siap scan berikutnya
+        $this->reset('nimMaba'); // kosongkan input biar siap scan berikutnya
     }
 }

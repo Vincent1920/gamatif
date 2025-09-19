@@ -14,16 +14,19 @@
                             :src="logoUnikomUrl"
                             class="h-15 me-3"
                             alt="Logo UNIKOM"
+                            loading="lazy"
                         />
                         <img
                             :src="logoHMIFtUrl"
                             class="h-15 me-3"
                             alt="Logo HMIF"
+                            loading="lazy"
                         />
                         <img
                             :src="logoKabinetUrl"
                             class="h-15 me-3"
                             alt="Logo Kabinet"
+                            loading="lazy"
                         />
                     </div>
 
@@ -51,6 +54,7 @@
                         :src="logoGamatifUrl"
                         class="h-15 me-3"
                         alt="Logo UNIKOM"
+                        loading="lazy"
                     />
                 </div>
                 <!-- <h2 class="text-3xl font-bold text-center text-gray-800 my-6">

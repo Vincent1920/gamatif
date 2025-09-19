@@ -1,5 +1,5 @@
 <template>
-    <div class="p-8 mt-15" v-if="user">
+    <div class="p-8 mt-10" v-if="user">
         <!-- Judul -->
         <h1 class="text-3xl font-bold mb-8 text-gray-800">
             Selamat Datang,
@@ -36,7 +36,7 @@
 
                 <div class="flex gap-2 mt-4">
                     <button
-                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-yellow-600"
+                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-yellow-600 cursor-pointer"
                         @click="goToProfile"
                     >
                         Lihat Profil
@@ -44,7 +44,7 @@
 
                     <button
                         v-if="!user.kelompok"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 cursor-pointer"
                         @click="goToAmbilKelompok"
                     >
                         Ambil Kelompok
@@ -60,7 +60,7 @@
                     class="text-white px-4 py-2 rounded-lg text-sm w-full"
                     :class="
                         user.kelompok
-                            ? 'bg-green-500 hover:bg-green-600'
+                            ? 'bg-green-500 hover:bg-green-600 cursor-pointer'
                             : 'bg-gray-300 cursor-not-allowed'
                     "
                     @click="goToGrup"
@@ -73,17 +73,22 @@
                     :disabled="!isBukuSakuAvailable"
                     :class="
                         isBukuSakuAvailable
-                            ? 'bg-blue-500 hover:bg-blue-600'
+                            ? 'bg-yellow-500 hover:bg-yellow-600 cursor-pointer'
                             : 'bg-gray-300 cursor-not-allowed'
                     "
                 >
-                    Buku Saku
+                    Buku Panduan
                 </button>
 
                 <button
-                    disabled
-                    class="text-white px-4 py-2 rounded-lg text-sm w-full bg-gray-300 cursor-not-allowed"
-                    @click=""
+                    :disabled="!user.kelompok"
+                    class="text-white px-4 py-2 rounded-lg text-sm w-full"
+                    @click="goToAbsen"
+                    :class="
+                        user.kelompok
+                            ? 'bg-blue-500 hover:bg-blue-600 cursor-pointer'
+                            : 'bg-gray-300 cursor-not-allowed'
+                    "
                 >
                     Absen
                 </button>
@@ -109,8 +114,11 @@
                     📅 Jadwal Kegiatan
                 </h2>
                 <!-- Tampilan Loading -->
-                <div v-if="isJadwalLoading" class="text-sm text-gray-500">
-                    Memuat jadwal...
+                <div v-if="isJadwalLoading" class="space-y-4">
+                    <div v-for="n in 3" :key="n">
+                        <SkeletonLoader customClass="h-4 w-3/4 mb-2" />
+                        <SkeletonLoader customClass="h-3 w-1/2" />
+                    </div>
                 </div>
                 <!-- Tampilan Error -->
                 <div v-if="jadwalError" class="text-sm text-red-500">
@@ -154,8 +162,18 @@
                     📲 Jangan Lupa Follow Yaa!!
                 </h2>
                 <!-- Tampilan Loading -->
-                <div v-if="isSosmedLoading" class="text-sm text-gray-500">
-                    Memuat link...
+
+                <div
+                    v-if="isSosmedLoading"
+                    role="status"
+                    class="space-y-3 animate-pulse"
+                >
+                    <div
+                        v-for="n in 2"
+                        :key="n"
+                        class="h-10 bg-gray-200 rounded-md dark:bg-gray-700 w-full"
+                    ></div>
+                    <span class="sr-only">Loading...</span>
                 </div>
                 <!-- Tampilan Error -->
                 <div v-if="sosmedError" class="text-sm text-red-500">
@@ -180,6 +198,7 @@
 </template>
 
 <script setup>
+import SkeletonLoader from "@/Components/SkeletonLoader.vue";
 import { onMounted, watch, computed } from "vue"; // 1. Impor 'watch'
 import { useRouter, useRoute } from "vue-router"; // 2. Impor 'useRoute'
 import { storeToRefs } from "pinia";
@@ -279,5 +298,8 @@ const goToGrup = () => {
 
 const goToAmbilKelompok = () => {
     router.push("/ambil-kelompok");
+};
+const goToAbsen = () => {
+    router.push("/absen-maba");
 };
 </script>
