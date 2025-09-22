@@ -19,7 +19,7 @@ use App\Filament\Resources\BarangBawaanResource\RelationManagers;
 use App\Filament\Resources\BarangBawaanResource\Pages\EditBarangBawaan;
 use App\Filament\Resources\BarangBawaanResource\Pages\ListBarangBawaans;
 use App\Filament\Resources\BarangBawaanResource\Pages\CreateBarangBawaan;
-
+use Illuminate\Support\Facades\Auth;
 
 class BarangBawaanResource extends Resource
 {
@@ -28,15 +28,25 @@ class BarangBawaanResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $pluralModelLabel = 'barang bawaan';
 
-    public static function getEloquentQuery(): Builder
-    {
-        // hanya absensi dengan status = hadir
-        return parent::getEloquentQuery()
-            ->with(['mahasiswaBaru.kelompok', 'barangBawaans'])
-            ->where('status', 'hadir');
+ 
+
+
+public static function getEloquentQuery(): Builder
+{
+    $user = Auth::user();
+
+    $query = parent::getEloquentQuery()
+        ->with(['mahasiswaBaru.kelompok', 'barangBawaans'])
+        ->where('status', 'hadir');
+
+    if ($user->role == 'pk') {
+        $query->whereHas('mahasiswaBaru.kelompok', function ($q) use ($user) {
+            $q->where('id', $user->kelompok_id);
+        });
     }
 
-
+    return $query;
+}
 
 
 public static function table(Table $table): Table
@@ -116,8 +126,7 @@ public static function table(Table $table): Table
     {
         return [
             'index' => Pages\ListBarangBawaans::route('/'),
-            // 'create' => Pages\CreateBarangBawaan::route('/create'),
-            // 'edit' => Pages\EditBarangBawaan::route('/{record}/edit'),
+           
         ];
     }
 }
