@@ -24,4 +24,12 @@ public function namaBarang()
     return $this->belongsTo(NamaBarangBawaan::class, 'Nama_Barang_Bawaan_id');
 }
 
+  public function jadwalKegiatan()
+    {
+        return $this->belongsTo(JadwalKegiatan::class, 'jadwal_kegiatan_id');
+    }
+ public function namaBarangBawaan()
+    {
+        return $this->belongsTo(NamaBarangBawaan::class, 'Nama_Barang_Bawaan_id');
+    }
 }

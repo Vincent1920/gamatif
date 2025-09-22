@@ -20,6 +20,9 @@ use App\Filament\Resources\BarangBawaanResource\Pages\EditBarangBawaan;
 use App\Filament\Resources\BarangBawaanResource\Pages\ListBarangBawaans;
 use App\Filament\Resources\BarangBawaanResource\Pages\CreateBarangBawaan;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\BarangBawaanExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Tables\Actions\Action;
 
 class BarangBawaanResource extends Resource
 {
@@ -61,6 +64,20 @@ public static function table(Table $table): Table
         ->get();
 
     return $table
+   
+        ->headerActions([
+    // Export semua data barang bawaan
+    Action::make('export_barang_bawaan')
+        ->label('Export Barang Bawaan')
+        ->icon('heroicon-o-arrow-down-tray')
+        ->action(function () {
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new \App\Exports\BarangBawaanExport(),
+                'barang_bawaan.xlsx'
+            );
+        }),
+])
+
         ->columns(array_merge([
             TextColumn::make('id')
                 ->label('No')
@@ -81,8 +98,7 @@ public static function table(Table $table): Table
                 ->sortable()
                 ->searchable(),
 
-            TextColumn::make('mahasiswaBaru.kelompok.nama_kelompok')
-                ->label('Kelompok'),
+            
         ], $barangList->map(function ($barang) {
             return CheckboxColumn::make("barang_{$barang->id}")
                 ->label($barang->Nama_Barang)
