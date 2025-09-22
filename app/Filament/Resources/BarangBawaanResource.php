@@ -20,6 +20,7 @@ use App\Filament\Resources\BarangBawaanResource\Pages\EditBarangBawaan;
 use App\Filament\Resources\BarangBawaanResource\Pages\ListBarangBawaans;
 use App\Filament\Resources\BarangBawaanResource\Pages\CreateBarangBawaan;
 
+
 class BarangBawaanResource extends Resource
 {
     protected static ?string $model = Absensi::class;
@@ -36,67 +37,73 @@ class BarangBawaanResource extends Resource
     }
 
 
+
+
 public static function table(Table $table): Table
 {
-    $columns = [
-        TextColumn::make('id')
-            ->label('No')
-            ->rowIndex(),
+    // Ambil filter jadwal kegiatan aktif
+    $selectedJadwalId = request()->input('tableFilters.jadwal_kegiatan_id.value');
 
-        TextColumn::make('mahasiswaBaru.nim')
-            ->label('NIM')
-            ->sortable()
-            ->searchable(),
-
-        TextColumn::make('mahasiswaBaru.nama_lengkap')
-            ->label('Nama')
-            ->sortable()
-            ->searchable(),
-
-        TextColumn::make('jadwalKegiatan.nama')
-            ->label('Jadwal Kegiatan')
-            ->sortable()
-            ->searchable(),
-
-        TextColumn::make('mahasiswaBaru.kelompok.nama_kelompok')
-            ->label('Kelompok'),
-    ];
-
-    // Ambil semua nama barang
-    $barangList = NamaBarangBawaan::orderBy('id')->get();
-
-                foreach ($barangList as $barang) {
-                $columns[] = CheckboxColumn::make("barang_virtual_{$barang->id}") // kasih prefix supaya jelas virtual
-                    ->label($barang->Nama_Barang)
-                    ->alignCenter()
-                    ->sortable(false)   // ⛔ tidak ikut query DB
-                    ->searchable(false) // ⛔ tidak cari di DB
-                    ->getStateUsing(function ($record) use ($barang) {
-                        return $record->barangBawaans
-                            ->contains('Nama_Barang_Bawaan_id', $barang->id);
-                    })
-                    ->afterStateUpdated(function ($state, $record) use ($barang) {
-                        if ($state) {
-                            BarangBawaan::firstOrCreate([
-                                'absensi_id'            => $record->id,
-                                'jadwal_kegiatan_id'    => $record->jadwal_kegiatan_id,
-                                'Nama_Barang_Bawaan_id' => $barang->id,
-                            ]);
-                        } else {
-                            BarangBawaan::where('absensi_id', $record->id)
-                                ->where('jadwal_kegiatan_id', $record->jadwal_kegiatan_id)
-                                ->where('Nama_Barang_Bawaan_id', $barang->id)
-                                ->delete();
-                        }
-                    })
-                    ->disableClick(false); // ⬅️ biar tetap bisa di klik
-            }
-
+    // Barang bawaan sesuai filter
+    $barangList = NamaBarangBawaan::query()
+        ->when($selectedJadwalId, fn($q) => $q->where('jadwal_kegiatan_id', $selectedJadwalId))
+        ->orderBy('id')
+        ->get();
 
     return $table
-        ->columns($columns)
+        ->columns(array_merge([
+            TextColumn::make('id')
+                ->label('No')
+                ->rowIndex(),
+
+            TextColumn::make('mahasiswaBaru.nim')
+                ->label('NIM')
+                ->sortable()
+                ->searchable(),
+
+            TextColumn::make('mahasiswaBaru.nama_lengkap')
+                ->label('Nama')
+                ->sortable()
+                ->searchable(),
+
+            TextColumn::make('jadwalKegiatan.nama')
+                ->label('Jadwal Kegiatan')
+                ->sortable()
+                ->searchable(),
+
+            TextColumn::make('mahasiswaBaru.kelompok.nama_kelompok')
+                ->label('Kelompok'),
+        ], $barangList->map(function ($barang) {
+            return CheckboxColumn::make("barang_{$barang->id}")
+                ->label($barang->Nama_Barang)
+                ->alignCenter()
+                ->getStateUsing(fn($record) => $record->barangBawaans
+                    ->contains('Nama_Barang_Bawaan_id', $barang->id))
+                ->afterStateUpdated(function ($state, $record) use ($barang) {
+                    if ($state) {
+                        BarangBawaan::firstOrCreate([
+                            'absensi_id'            => $record->id,
+                            'jadwal_kegiatan_id'    => $record->jadwal_kegiatan_id,
+                            'Nama_Barang_Bawaan_id' => $barang->id,
+                        ]);
+                    } else {
+                        BarangBawaan::where('absensi_id', $record->id)
+                            ->where('jadwal_kegiatan_id', $record->jadwal_kegiatan_id)
+                            ->where('Nama_Barang_Bawaan_id', $barang->id)
+                            ->delete();
+                    }
+                });
+        })->toArray()))
+        ->filters([
+            Tables\Filters\SelectFilter::make('jadwal_kegiatan_id')
+                ->label('Jadwal Kegiatan')
+                ->relationship('jadwalKegiatan', 'nama')
+                ->searchable()
+                ->preload(),
+        ])
         ->defaultSort('id', 'asc');
 }
+
 
     public static function getRelations(): array
     {
