@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\DataMahasiswaResource\Pages;
 
 use Filament\Actions;
-use App\Models\kelompok;
+use App\Models\Kelompok;
 use App\Models\DataMahasiswa;
 use Livewire\WithFileUploads;
 use GuzzleHttp\Promise\Create;

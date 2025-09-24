@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kelompok;
+use App\Models\Kelompok;
 use App\Http\Requests\StorekelompokRequest;
 use App\Http\Requests\UpdatekelompokRequest;
 

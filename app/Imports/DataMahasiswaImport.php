@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\kelompok;
+use App\Models\Kelompok;
 use App\Models\DataMahasiswa;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToModel;

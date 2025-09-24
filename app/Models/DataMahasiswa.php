@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\kelompok;
+use App\Models\Kelompok;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

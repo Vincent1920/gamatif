@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\kelompok;
+use App\Models\Kelompok;
 use Illuminate\Auth\Access\Response;
 
 class KelompokPolicy

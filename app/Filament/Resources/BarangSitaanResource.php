@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\kelompok;
+use App\Models\Kelompok;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\BarangSitaan;
