@@ -2,14 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\IzinKehadiran;
-use App\Models\MahasiswaBaru;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\IzinKehadiran;
+use App\Models\MahasiswaBaru;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\IzinKehadiranResource\Pages;
+use App\Filament\Resources\IzinKehadiranResource\Pages\EditIzinKehadiran;
+use App\Filament\Resources\IzinKehadiranResource\Pages\ListIzinKehadirans;
+use App\Filament\Resources\IzinKehadiranResource\Pages\CreateIzinKehadiran;
 
 class IzinKehadiranResource extends Resource
 {
@@ -64,10 +74,13 @@ class IzinKehadiranResource extends Resource
 
             Forms\Components\Textarea::make('catatan')
                 ->label('Catatan')
-                ->maxLength(255),
+                ->maxLength(255)
+                ->required(),
 
             Forms\Components\FileUpload::make('foto')
                 ->label('Bukti (Opsional)')
+                ->disk('public')
+                ->directory('IzinKehadiran')
                 ->image()
                 ->maxSize(2048),
         ]);
@@ -103,10 +116,26 @@ class IzinKehadiranResource extends Resource
                     ])
                     ->formatStateUsing(fn(string $state) => ucfirst($state)),
 
+            Tables\Columns\TextColumn::make('catatan')
+                        ->label('catatan'),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Waktu Diajukan')
                     ->dateTime('d M Y H:i'),
-            ])
+
+                  ImageColumn::make('foto')
+                        ->label('Bukti Surat Izin')
+                        ->disk('public')
+                        ->width(120)
+                        ->height(70)
+                        ->square()
+                        ->url(fn ($record) => Storage::disk('public')->url($record->foto))
+                        ->openUrlInNewTab()
+                        ->extraImgAttributes(['loading' => 'lazy']),
+
+                ])
+
+
             ->filters([
                 Tables\Filters\SelectFilter::make('mahasiswa.kelompok_id')
                     ->label('Kelompok')

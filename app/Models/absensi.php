@@ -27,4 +27,14 @@ class Absensi extends Model
     {
         return $this->belongsTo(JadwalKegiatan::class, 'jadwal_kegiatan_id');
     }
+
+    public function mahasiswaBaru()
+    {
+        return $this->belongsTo(MahasiswaBaru::class, 'mahasiswa_baru_id');
+    }
+
+    public function jadwalKegiatan()
+    {
+        return $this->belongsTo(JadwalKegiatan::class, 'jadwal_kegiatan_id');
+    }
 }

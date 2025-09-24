@@ -2,15 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Absensi;
-use App\Models\MahasiswaBaru;
+use App\Exports\AbsensiExport;
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Absensi;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\MahasiswaBaru;
 use Filament\Resources\Resource;
+use App\Exports\InfoDataMabaExport;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
 use App\Filament\Resources\AbsensiResource\Pages;
-
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\Select as FormsSelect;
+use Filament\Tables\Actions\Action;
+use App\Models\Kelompok;
 class AbsensiResource extends Resource
 {
     protected static ?string $model = Absensi::class;
@@ -93,6 +102,45 @@ class AbsensiResource extends Resource
 
 
             ])
+                ->headerActions([
+                    // Export semua data
+                    Action::make('export_all')
+                        ->label('Export Semua')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->action(function () {
+                            return \Maatwebsite\Excel\Facades\Excel::download(
+                                new AbsensiExport(), 
+                                'absensi_all.xlsx'
+                            );
+                        }),
+
+                    // Export per kelompok
+                    Action::make('export_per_kelompok')
+                        ->label('Export per Kelompok')
+                        ->icon('heroicon-o-funnel')
+                        ->form([
+                            Forms\Components\Select::make('kelompok_id')
+                                ->label('Kelompok')
+                                ->options(fn () => \App\Models\Kelompok::orderBy('nama_kelompok')
+                                    ->pluck('nama_kelompok', 'id')
+                                    ->toArray()
+                                )
+                                ->searchable()
+                                ->required(),
+                        ])
+                        ->action(function (array $data) {
+                            $kelompokId = $data['kelompok_id'];
+                            $kelompok = \App\Models\Kelompok::find($kelompokId);
+
+                            $filename = 'absensi_' . ($kelompok?->nama_kelompok ?? $kelompokId) . '.xlsx';
+
+                            return \Maatwebsite\Excel\Facades\Excel::download(
+                                new AbsensiExport($kelompokId),
+                                $filename
+                            );
+                        }),
+                ])
+
             ->filters([
                 Tables\Filters\SelectFilter::make('mahasiswa.kelompok_id')
                     ->label('Kelompok')
@@ -121,7 +169,6 @@ class AbsensiResource extends Resource
             'index' => Pages\ListAbsensis::route('/'),
             'create' => Pages\CreateAbsensi::route('/create'),
             'edit' => Pages\EditAbsensi::route('/{record}/edit'),
-            'absenqr' => Pages\AbsenQR::route('/absenqr'),
         ];
     }
 }
