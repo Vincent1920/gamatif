@@ -169,6 +169,7 @@ class AbsensiResource extends Resource
             'index' => Pages\ListAbsensis::route('/'),
             'create' => Pages\CreateAbsensi::route('/create'),
             'edit' => Pages\EditAbsensi::route('/{record}/edit'),
+            'absen-qr' => Pages\AbsenQR::route('/absen-qr'),
         ];
     }
 }
