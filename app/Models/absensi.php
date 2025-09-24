@@ -37,4 +37,13 @@ class Absensi extends Model
     {
         return $this->belongsTo(JadwalKegiatan::class, 'jadwal_kegiatan_id');
     }
+
+
+public function barangBawaans()
+{
+    return $this->hasMany(BarangBawaan::class, 'absensi_id');
+}
+
+
+
 }
