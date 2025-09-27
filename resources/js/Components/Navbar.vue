@@ -3,7 +3,7 @@
         :class="[
             'fixed w-full z-20 top-0 start-0 border-b transition-colors duration-300',
             isScrolled
-                ? 'bg-white border-gray-200 shadow-sm dark:bg-gray-900 dark:border-gray-700'
+                ? 'bg-white border-gray-200 shadow-sm'
                 : 'bg-transparent border-transparent',
         ]"
     >
@@ -34,7 +34,7 @@
                     <button
                         @click="isDropdownOpen = !isDropdownOpen"
                         type="button"
-                        class="flex items-center text-sm bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md transition px-2 py-1 focus:ring-2 focus:ring-yellow-300 dark:bg-gray-800 dark:border-gray-600 cursor-pointer"
+                        class="flex items-center text-sm bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md transition px-2 py-1 focus:ring-2 focus:ring-yellow-300 cursor-pointer"
                     >
                         <img
                             class="w-8 h-8 rounded-full"
@@ -43,7 +43,7 @@
                             loading="lazy"
                         />
                         <span
-                            class="hidden md:block ml-3 text-gray-700 font-medium dark:text-gray-300"
+                            class="hidden md:block ml-3 text-gray-700 font-medium "
                         >
                             {{ shortName }}
                         </span>
@@ -64,30 +64,30 @@
 
                     <div
                         v-if="isDropdownOpen"
-                        class="absolute right-0 mt-2 z-50 w-52 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-600"
+                        class="absolute right-0 mt-2 z-50 w-52 bg-white border border-gray-200 rounded-lg shadow-lg"
                     >
                         <div
-                            class="px-4 py-3 border-b border-gray-100 dark:border-gray-700"
+                            class="px-4 py-3 border-b border-gray-100"
                         >
                             <p
-                                class="text-sm font-semibold text-gray-800 dark:text-white"
+                                class="text-sm font-semibold text-gray-800 "
                             >
                                 {{ user.nama_lengkap }}
                             </p>
                             <p
-                                class="text-sm text-gray-500 truncate dark:text-gray-400"
+                                class="text-sm text-gray-500 truncate "
                             >
                                 {{ user.email }}
                             </p>
                         </div>
                         <ul
-                            class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                            class="py-2 text-sm text-gray-700 "
                         >
                             <li>
                                 <router-link
                                     to="/"
                                     @click="isDropdownOpen = false"
-                                    class="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                                    class="block px-4 py-2 hover:bg-gray-50 transition"
                                     >Beranda</router-link
                                 >
                             </li>
@@ -95,27 +95,35 @@
                                 <router-link
                                     to="/dashboard-maba"
                                     @click="isDropdownOpen = false"
-                                    class="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                                    class="block px-4 py-2 hover:bg-gray-50 transition"
                                     >Dashboard</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link
+                                    to="/menfess"
+                                    class="block px-4 py-2 hover:bg-gray-50 transition"
+                                    @click="isDropdownOpen = false"
+                                    >Gamafess</router-link
                                 >
                             </li>
                             <li class="px-4">
                                 <hr
-                                    class="my-1 border-gray-200 dark:border-gray-600"
+                                    class="my-1 border-gray-200"
                                 />
                             </li>
                             <li>
                                 <router-link
                                     to="/profile-maba"
                                     @click="isDropdownOpen = false"
-                                    class="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                                    class="block px-4 py-2 hover:bg-gray-50 transition"
                                     >Profile</router-link
                                 >
                             </li>
                             <li>
                                 <button
                                     @click="handleLogout"
-                                    class="block w-full text-left px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer"
+                                    class="block w-full text-left px-4 py-2 hover:bg-gray-50 transition cursor-pointer"
                                 >
                                     Logout
                                 </button>
@@ -142,7 +150,7 @@
                 id="navbar-sticky"
             >
                 <ul
-                    class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:border-gray-700 text-gray-700 dark:text-gray-300"
+                    class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 text-gray-700 "
                 >
                     <template v-if="isAuthenticated">
                         <li>
@@ -159,6 +167,14 @@
                                 class="block py-2 px-3 rounded hover:text-yellow-500"
                                 active-class="text-yellow-500"
                                 >Dashboard</router-link
+                            >
+                        </li>
+                        <li>
+                            <router-link
+                                to="/menfess"
+                                class="block py-2 px-3 rounded hover:text-yellow-500"
+                                active-class="text-yellow-500"
+                                >Gamafess</router-link
                             >
                         </li>
                     </template>
@@ -185,6 +201,14 @@
                                 @click.prevent="scrollTo('kontak')"
                                 class="block py-2 px-3 hover:text-yellow-500"
                                 >Kontak</a
+                            >
+                        </li>
+                        <li>
+                            <router-link
+                                to="/menfess"
+                                class="block py-2 px-3 rounded hover:text-yellow-500"
+                                active-class="text-yellow-500"
+                                >Gamafess</router-link
                             >
                         </li>
                     </template>

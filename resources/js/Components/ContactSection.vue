@@ -110,12 +110,19 @@
                                 alt="Logo UNIKOM"
                                 loading="lazy"
                             />
-                            <img
-                                :src="logoHMIFtUrl"
-                                class="h-15 me-3"
-                                alt="Logo HMIF"
-                                loading="lazy"
-                            />
+
+                            <a
+                                href="https://hmif.unikom.my.id/"
+                                target="_blank"
+                                class="cursor-pointer"
+                            >
+                                <img
+                                    :src="logoHMIFtUrl"
+                                    class="h-15 me-3"
+                                    alt="Logo HMIF"
+                                    loading="lazy"
+                            /></a>
+
                             <img
                                 :src="logoKabinetUrl"
                                 class="h-15 me-3"

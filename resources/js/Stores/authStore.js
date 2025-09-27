@@ -25,13 +25,13 @@ export const useAuthStore = defineStore("auth", () => {
             api.defaults.headers.common[
                 "Authorization"
             ] = `Bearer ${token.value}`;
-            console.log(
-                "✅ Axios header set:",
-                `Bearer ${token.value.substring(0, 20)}...`
-            );
+            // console.log(
+            //     "✅ Axios header set:",
+            //     `Bearer ${token.value.substring(0, 20)}...`
+            // );
         } else {
             delete api.defaults.headers.common["Authorization"];
-            console.log("🗑️ Axios header cleared");
+            // console.log("🗑️ Axios header cleared");
         }
     };
 
@@ -118,17 +118,17 @@ export const useAuthStore = defineStore("auth", () => {
             // PENTING: Set header sebelum request
             initializeAxios();
 
-            console.log(
-                "🔄 Mencoba auto login dengan token:",
-                token.value?.substring(0, 20) + "..."
-            );
+            // console.log(
+            //     "🔄 Mencoba auto login dengan token:",
+            //     token.value?.substring(0, 20) + "..."
+            // );
 
             const response = await api.get("/me");
 
             // Akses struktur response yang benar
             if (response.data?.payload?.user) {
                 user.value = response.data.payload.user;
-                console.log("✅ Auto login berhasil:", user.value.nama_lengkap);
+                // console.log("✅ Auto login berhasil:", user.value.nama_lengkap);
             } else {
                 console.error(
                     "❌ Unexpected response structure:",
@@ -144,7 +144,7 @@ export const useAuthStore = defineStore("auth", () => {
                 const status = error.response.status;
                 if (status === 401 || status === 403) {
                     console.log("🚫 Token tidak valid, melakukan logout...");
-                    logout();
+                    // logout();
                 } else if (status === 500) {
                     console.error(
                         "🔥 Server error saat auto login:",
