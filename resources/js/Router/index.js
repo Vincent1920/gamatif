@@ -60,7 +60,6 @@ const routes = [
         path: "/buat-menfess",
         name: "buat_menfess",
         component: CreateMenfessPage,
-        meta: { requiresAuth: true },
     },
     {
         path: "/menfess",

@@ -38,6 +38,7 @@ Route::post('/login', [MahasiswaBaruAuthController::class, 'login']);
 
 Route::get('/menfess', [MenfessController::class, 'index']);
 Route::get('/menfess/{id}', [MenfessController::class, 'show']);
+Route::post('/menfess', [MenfessController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [MahasiswaBaruAuthController::class, 'logout']);
@@ -50,6 +51,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/kelompok/status', [KelompokGeneratorController::class, 'getStatus']);
     Route::post('/kelompok/generate', [KelompokGeneratorController::class, 'generate']);
-
-    Route::post('/menfess', [MenfessController::class, 'store']);
 });
