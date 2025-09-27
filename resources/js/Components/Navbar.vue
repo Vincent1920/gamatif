@@ -27,10 +27,10 @@
             </router-link>
 
             <div
-                v-if="isAuthenticated"
                 class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
             >
-                <div class="relative" ref="profileDropdownRef">
+                <!-- Menu untuk Pengguna yang Sudah Login -->
+                <div v-if="isAuthenticated" class="relative" ref="profileDropdownRef">
                     <button
                         @click="isDropdownOpen = !isDropdownOpen"
                         type="button"
@@ -66,85 +66,77 @@
                         v-if="isDropdownOpen"
                         class="absolute right-0 mt-2 z-50 w-52 bg-white border border-gray-200 rounded-lg shadow-lg"
                     >
-                        <div
-                            class="px-4 py-3 border-b border-gray-100"
-                        >
-                            <p
-                                class="text-sm font-semibold text-gray-800 "
-                            >
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <p class="text-sm font-semibold text-gray-800">
                                 {{ user.nama_lengkap }}
                             </p>
-                            <p
-                                class="text-sm text-gray-500 truncate "
-                            >
+                            <p class="text-sm text-gray-500 truncate">
                                 {{ user.email }}
                             </p>
                         </div>
-                        <ul
-                            class="py-2 text-sm text-gray-700 "
-                        >
+                        <ul class="py-2 text-sm text-gray-700">
                             <li>
-                                <router-link
-                                    to="/"
-                                    @click="isDropdownOpen = false"
-                                    class="block px-4 py-2 hover:bg-gray-50 transition"
-                                    >Beranda</router-link
-                                >
+                                <router-link to="/" @click="isDropdownOpen = false" class="block px-4 py-2 hover:bg-gray-50 transition">Beranda</router-link>
                             </li>
                             <li>
-                                <router-link
-                                    to="/dashboard-maba"
-                                    @click="isDropdownOpen = false"
-                                    class="block px-4 py-2 hover:bg-gray-50 transition"
-                                    >Dashboard</router-link
-                                >
+                                <router-link to="/dashboard-maba" @click="isDropdownOpen = false" class="block px-4 py-2 hover:bg-gray-50 transition">Dashboard</router-link>
                             </li>
                             <li>
-                                <router-link
-                                    to="/menfess"
-                                    class="block px-4 py-2 hover:bg-gray-50 transition"
-                                    @click="isDropdownOpen = false"
-                                    >Gamafess</router-link
-                                >
+                                <router-link to="/menfess" class="block px-4 py-2 hover:bg-gray-50 transition" @click="isDropdownOpen = false">Gamafess</router-link>
                             </li>
                             <li class="px-4">
-                                <hr
-                                    class="my-1 border-gray-200"
-                                />
+                                <hr class="my-1 border-gray-200" />
                             </li>
                             <li>
-                                <router-link
-                                    to="/profile-maba"
-                                    @click="isDropdownOpen = false"
-                                    class="block px-4 py-2 hover:bg-gray-50 transition"
-                                    >Profile</router-link
-                                >
+                                <router-link to="/profile-maba" @click="isDropdownOpen = false" class="block px-4 py-2 hover:bg-gray-50 transition">Profile</router-link>
                             </li>
                             <li>
-                                <button
-                                    @click="handleLogout"
-                                    class="block w-full text-left px-4 py-2 hover:bg-gray-50 transition cursor-pointer"
-                                >
+                                <button @click="handleLogout" class="block w-full text-left px-4 py-2 hover:bg-gray-50 transition cursor-pointer">
                                     Logout
                                 </button>
                             </li>
                         </ul>
                     </div>
                 </div>
+
+                <!-- Menu untuk Pengguna yang Belum Login -->
+                <div v-else class="flex items-center space-x-2">
+                    <router-link
+                        to="/login-maba"
+                        class="text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                    >
+                        Login
+                    </router-link>
+                    <!-- Tombol Hamburger untuk Mobile -->
+                    <div class="relative md:hidden" ref="mobileMenuRef">
+                        <button @click="isMobileMenuOpen = !isMobileMenuOpen" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" :aria-expanded="isMobileMenuOpen">
+                            <span class="sr-only">Buka menu utama</span>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                            </svg>
+                        </button>
+                         <!-- Dropdown Mobile -->
+                        <div v-if="isMobileMenuOpen" class="absolute right-0 mt-2 z-50 w-52 bg-white border border-gray-200 rounded-lg shadow-lg">
+                             <ul class="py-2 text-sm text-gray-700">
+                                <li>
+                                    <a href="#beranda" @click.prevent="scrollTo('beranda')" class="block px-4 py-2 hover:bg-gray-50 transition">Beranda</a>
+                                </li>
+                                <li>
+                                    <a href="#tentang" @click.prevent="scrollTo('tentang')" class="block px-4 py-2 hover:bg-gray-50 transition">Tentang</a>
+                                </li>
+                                <li>
+                                    <a href="#kontak" @click.prevent="scrollTo('kontak')" class="block px-4 py-2 hover:bg-gray-50 transition">Kontak</a>
+                                </li>
+                                <li>
+                                    <router-link to="/menfess" @click="isMobileMenuOpen = false" class="block px-4 py-2 hover:bg-gray-50 transition">Gamafess</router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div
-                v-else
-                class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
-            >
-                <router-link
-                    to="/login-maba"
-                    class="text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
-                >
-                    Login
-                </router-link>
-            </div>
-
+            <!-- Menu Desktop -->
             <div
                 class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
                 id="navbar-sticky"
@@ -154,62 +146,27 @@
                 >
                     <template v-if="isAuthenticated">
                         <li>
-                            <router-link
-                                to="/"
-                                class="block py-2 px-3 rounded hover:text-yellow-500"
-                                active-class="text-yellow-500"
-                                >Beranda</router-link
-                            >
+                            <router-link to="/" class="block py-2 px-3 rounded hover:text-yellow-500" active-class="text-yellow-500">Beranda</router-link>
                         </li>
                         <li>
-                            <router-link
-                                to="/dashboard-maba"
-                                class="block py-2 px-3 rounded hover:text-yellow-500"
-                                active-class="text-yellow-500"
-                                >Dashboard</router-link
-                            >
+                            <router-link to="/dashboard-maba" class="block py-2 px-3 rounded hover:text-yellow-500" active-class="text-yellow-500">Dashboard</router-link>
                         </li>
                         <li>
-                            <router-link
-                                to="/menfess"
-                                class="block py-2 px-3 rounded hover:text-yellow-500"
-                                active-class="text-yellow-500"
-                                >Gamafess</router-link
-                            >
+                            <router-link to="/menfess" class="block py-2 px-3 rounded hover:text-yellow-500" active-class="text-yellow-500">Gamafess</router-link>
                         </li>
                     </template>
                     <template v-else>
                         <li>
-                            <a
-                                href="#beranda"
-                                @click.prevent="scrollTo('beranda')"
-                                class="block py-2 px-3 hover:text-yellow-500"
-                                >Beranda</a
-                            >
+                            <a href="#beranda" @click.prevent="scrollTo('beranda')" class="block py-2 px-3 hover:text-yellow-500">Beranda</a>
                         </li>
                         <li>
-                            <a
-                                href="#tentang"
-                                @click.prevent="scrollTo('tentang')"
-                                class="block py-2 px-3 hover:text-yellow-500"
-                                >Tentang</a
-                            >
+                            <a href="#tentang" @click.prevent="scrollTo('tentang')" class="block py-2 px-3 hover:text-yellow-500">Tentang</a>
                         </li>
                         <li>
-                            <a
-                                href="#kontak"
-                                @click.prevent="scrollTo('kontak')"
-                                class="block py-2 px-3 hover:text-yellow-500"
-                                >Kontak</a
-                            >
+                            <a href="#kontak" @click.prevent="scrollTo('kontak')" class="block py-2 px-3 hover:text-yellow-500">Kontak</a>
                         </li>
                         <li>
-                            <router-link
-                                to="/menfess"
-                                class="block py-2 px-3 rounded hover:text-yellow-500"
-                                active-class="text-yellow-500"
-                                >Gamafess</router-link
-                            >
+                            <router-link to="/menfess" class="block py-2 px-3 rounded hover:text-yellow-500" active-class="text-yellow-500">Gamafess</router-link>
                         </li>
                     </template>
                 </ul>
@@ -236,8 +193,10 @@ const { isAuthenticated, user } = storeToRefs(authStore);
 
 // State lokal
 const isDropdownOpen = ref(false);
+const isMobileMenuOpen = ref(false);
 const isScrolled = ref(false);
-const profileDropdownRef = ref(null); // Ref untuk elemen dropdown wrapper
+const profileDropdownRef = ref(null);
+const mobileMenuRef = ref(null); // Ref untuk menu mobile
 
 const baseURL = window.location.origin;
 
@@ -256,6 +215,7 @@ const shortName = computed(() => {
 
 // --- Functions ---
 async function scrollTo(id) {
+    isMobileMenuOpen.value = false; // Menutup menu mobile saat link di-klik
     if (router.currentRoute.value.path !== "/") {
         await router.push("/");
         setTimeout(() => {
@@ -280,7 +240,7 @@ const handleScroll = () => {
 };
 
 const handleClickOutside = (event) => {
-    // Jika dropdown terbuka dan klik terjadi di luar elemen dropdown
+    // Menutup dropdown profil
     if (
         isDropdownOpen.value &&
         profileDropdownRef.value &&
@@ -288,27 +248,25 @@ const handleClickOutside = (event) => {
     ) {
         isDropdownOpen.value = false;
     }
-};
-
-// Gunakan `watch` untuk mengelola event listener secara efisien
-watch(isDropdownOpen, (isOpen) => {
-    if (isOpen) {
-        // Tambahkan listener saat dropdown dibuka
-        document.addEventListener("mousedown", handleClickOutside);
-    } else {
-        // Hapus listener saat dropdown ditutup
-        document.removeEventListener("mousedown", handleClickOutside);
+    // Menutup dropdown mobile
+    if (
+        isMobileMenuOpen.value &&
+        mobileMenuRef.value &&
+        !mobileMenuRef.value.contains(event.target)
+    ) {
+        isMobileMenuOpen.value = false;
     }
-});
+};
 
 onMounted(() => {
     pengaturanWebStore.fetchPengaturanWeb();
     window.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
 });
 
 onUnmounted(() => {
-    // Pastikan semua listener dibersihkan saat komponen dihancurkan
     window.removeEventListener("scroll", handleScroll);
     document.removeEventListener("mousedown", handleClickOutside);
 });
 </script>
+
