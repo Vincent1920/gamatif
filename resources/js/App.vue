@@ -4,7 +4,7 @@
         <main :class="mainClasses">
             <router-view />
         </main>
-        <ContactSection v-if="!isAuthPage" />
+        <ContactSection v-if="!isAuthPage && route.name !== 'buat_menfess' && route.name !== 'detail_menfess'" />
     </div>
 </template>
 
