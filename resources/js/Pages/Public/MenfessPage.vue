@@ -1,10 +1,11 @@
 <template>
     <div class="container mx-auto p-4 md:p-8 mt-10">
         <header class="text-center mb-8">
-            <router-link to="/" class="text-pink-500 hover:text-pink-600 transition">
+            <router-link to="/buat-menfess" class="text-pink-500 hover:text-pink-600 transition">
                 <h1 class="font-comic text-5xl md:text-7xl font-bold drop-shadow-md">GAMAFESS</h1>
             </router-link>
-            <p class="text-gray-500 mt-2 text-lg">GAMATIF MENFESS</p>
+            <p class="text-gray-500 mt-2 text-lg">GAMATIF CONFESS</p>
+            <p class="text-gray-500 mt-2 text-md">Klik salah satu kartu untuk post di story Instagram!</p>
         </header>
 
         <main>
@@ -35,7 +36,7 @@
                      :style="{ animationDelay: (index * 100) + 'ms' }">
                     <p class="text-gray-600 text-sm mb-2">Untuk: <span class="font-semibold text-pink-700">{{ menfess.to }}</span></p>
                     <p class="text-gray-800 mb-4 text-lg break-words">“{{ menfess.message }}”</p>
-                    <p class="text-right text-gray-500 text-sm font-semibold">— {{ menfess.from }}</p>
+                    <p class="text-right text-gray-500 text-sm font-semibold break-words">— {{ menfess.from }}</p>
                 </router-link>
             </div>
         </main>
