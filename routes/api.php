@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\KelompokGeneratorController;
 use App\Http\Controllers\Api\PengaturanWebController;
 use App\Http\Controllers\Api\KritikSaranController;
+use App\Http\Controllers\Api\MenfessController;
 
 
 /*
@@ -35,6 +36,9 @@ Route::post('/kritik-saran', [KritikSaranController::class, 'store']);
 Route::post('/register', [MahasiswaBaruAuthController::class, 'register']);
 Route::post('/login', [MahasiswaBaruAuthController::class, 'login']);
 
+Route::get('/menfess', [MenfessController::class, 'index']);
+Route::get('/menfess/{id}', [MenfessController::class, 'show']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [MahasiswaBaruAuthController::class, 'logout']);
     Route::get('/me', [MahasiswaBaruAuthController::class, 'me']);
@@ -46,4 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/kelompok/status', [KelompokGeneratorController::class, 'getStatus']);
     Route::post('/kelompok/generate', [KelompokGeneratorController::class, 'generate']);
+
+    Route::post('/menfess', [MenfessController::class, 'store']);
 });

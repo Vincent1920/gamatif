@@ -40,8 +40,8 @@ import { h } from "vue";
 // Buat daftar card
 const cards = [
     {
-        title: "Kolaborasi",
-        desc: "Membangun jaringan dan kerja tim yang kuat untuk memecahkan masalah kompleks bersama.",
+        title: "Kebersamaan",
+        desc: "Membangun solidaritas dan jaringan sosial antar mahasiswa baru, rekan mahasiswa antar angkatan, dan dosen serta civitas akademik untuk menciptakan lingkungan kampus yang nyaman dan suportif.",
         bgColor: "bg-yellow-600",
         icon: {
             render() {
@@ -67,8 +67,8 @@ const cards = [
         },
     },
     {
-        title: "Inovasi",
-        desc: "Mendorong kreativitas dan pemikiran kritis untuk menciptakan solusi teknologi terdepan.",
+        title: "Kepemimpinan",
+        desc: "Mendorong kemampuan komunikasi, kerja sama, dan pengambilan keputusan melalui aktivitas kelompok yang melatih strategi, problem-solving, dan jiwa kepemimpinan.",
         bgColor: "bg-yellow-600",
         icon: {
             render() {
@@ -94,8 +94,8 @@ const cards = [
         },
     },
     {
-        title: "Kekeluargaan",
-        desc: "Menjadi bagian dari komunitas yang solid, suportif, dan saling menguatkan satu sama lain.",
+        title: "Pengembangan Diri",
+        desc: "Memberikan ruang eksplorasi potensi, mengenalkan budaya akademik dan organisasi, serta menanamkan nilai kemandirian dan tanggung jawab untuk menghadapi dunia perkuliahan.",
         bgColor: "bg-yellow-600",
         icon: {
             render() {
